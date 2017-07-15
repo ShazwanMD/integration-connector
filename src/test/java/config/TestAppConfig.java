@@ -1,8 +1,9 @@
 package config;
 
+import my.edu.umk.pams.connector.config.AcademicDataSourceConfig;
+import my.edu.umk.pams.connector.config.AccountDataSourceConfig;
 import my.edu.umk.pams.connector.config.BeanConfig;
-import my.edu.umk.pams.connector.config.PrimaryDataSourceConfig;
-import my.edu.umk.pams.connector.config.SecondaryDataSourceConfig;
+import my.edu.umk.pams.connector.config.IntakeDataSourceConfig;
 import my.edu.umk.pams.connector.config.RouteConfig;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,9 @@ import org.springframework.context.annotation.PropertySource;
 @Import({
         BeanConfig.class,
         RouteConfig.class,
-        PrimaryDataSourceConfig.class,
-        SecondaryDataSourceConfig.class
+        IntakeDataSourceConfig.class,
+        AcademicDataSourceConfig.class,
+        AccountDataSourceConfig.class
 })
 @PropertySource({"classpath:application.properties", "classpath:connector.properties"})
 public class TestAppConfig {
