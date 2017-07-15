@@ -15,6 +15,7 @@ import org.springframework.context.annotation.PropertySource;
         RouteConfig.class,
         IntakeDataSourceConfig.class,
         AcademicDataSourceConfig.class,
+        AccountDataSourceConfig.class,
 })
 @PropertySource(value = "classpath:application.properties")
 public class AppConfig {
