@@ -24,6 +24,6 @@ import org.springframework.context.annotation.PropertySource;
         AcademicDataSourceConfig.class,
         AccountDataSourceConfig.class
 })
-@PropertySource({"classpath:application.properties", "classpath:connector.properties"})
+@PropertySource({"classpath:application.properties"})
 public class TestAppConfig {
 }

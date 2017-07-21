@@ -51,9 +51,9 @@ public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
         camelContext.addRoutes(new RouteBuilder() {
             @Override
             public void configure() throws Exception {
-                PropertiesComponent properties = new PropertiesComponent();
-                properties.setLocation("classpath:connector.properties");
-                getContext().addComponent("properties", properties);
+//                PropertiesComponent properties = new PropertiesComponent();
+//                properties.setLocation("classpath:connector.properties");
+//                getContext().addComponent("properties", properties);
 
                 SqlComponent sqlComponent = new SqlComponent();
                 sqlComponent.setDataSource(intakeDataSource);
