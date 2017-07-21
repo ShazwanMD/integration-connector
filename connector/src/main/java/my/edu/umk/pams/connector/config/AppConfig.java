@@ -12,7 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 )
 @Import({
         BeanConfig.class,
-        RouteConfig.class,
+        DataSourceConfig.class,
         IntakeDataSourceConfig.class,
         AcademicDataSourceConfig.class,
         AccountDataSourceConfig.class,

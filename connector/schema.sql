@@ -1,0 +1,7 @@
+-- postgres
+DROP DATABASE IF EXISTS connector;
+DROP USER IF EXISTS connector;
+
+CREATE USER connector WITH PASSWORD 'connector';
+CREATE DATABASE connector WITH ENCODING 'UTF8' LC_COLLATE ='C' LC_CTYPE ='C' TEMPLATE =template0;
+GRANT ALL PRIVILEGES ON DATABASE connector to connector;
