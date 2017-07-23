@@ -15,7 +15,6 @@ public class IntakeDataSourceConfig {
     private Environment env;
 
     @Bean
-    @Primary
     public DataSource intakeDataSource() {
         return getIntakeBasicDataSource();
     }
