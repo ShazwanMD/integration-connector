@@ -1,7 +1,11 @@
 package my.edu.umk.pams.connector.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -20,17 +24,9 @@ public class CandidateMapper {
     public CandidateMapper() {
     }
 
-    public List<CandidatePayload> process(List<Map<String, Object>> result) {
+    public CandidatePayload map(String result) {
         LOG.info("candidate mapper");
-
-//        List<Candidate> codes = new ArrayList<Candidate>();
-//        for (Map<String, Object> map : result) {
-//            Candidate code = new Candidate();
-//            code.setMatricNo((String) map.get("matric_no"));
-//            code.setName((String) map.get("name"));
-//            codes.add(code);
-//        }
-//        return codes;
-        return null;
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.convertValue(result, CandidatePayload.class);
     }
 }

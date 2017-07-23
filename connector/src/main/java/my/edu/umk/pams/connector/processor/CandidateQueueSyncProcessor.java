@@ -14,9 +14,9 @@ import javax.sql.DataSource;
 import my.edu.umk.pams.connector.payload.CandidatePayload;
 
 @Component
-public class CandidateSyncProcessor implements Processor {
+public class CandidateQueueSyncProcessor implements Processor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(CandidateSyncProcessor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CandidateQueueSyncProcessor.class);
 
     @Autowired
     @Qualifier(value = "intakeDataSource")
@@ -37,11 +37,11 @@ public class CandidateSyncProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         LOG.info("processing");
-        final CandidatePayload[] candidates = exchange.getIn().getBody(CandidatePayload[].class);
-        for (CandidatePayload candidate : candidates) {
-            LOG.info("candidate: " + candidate);
-        }
+        final CandidatePayload candidate = exchange.getIn().getBody(CandidatePayload.class);
+        LOG.info("candidate: " + candidate);
+//        for (CandidatePayload candidate : candidates) {
+//            LOG.info("candidate: " + candidate);
+//        }
         // use REST API here
-
     }
 }

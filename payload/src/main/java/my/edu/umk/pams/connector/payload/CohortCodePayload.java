@@ -1,5 +1,10 @@
 package my.edu.umk.pams.connector.payload;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+
 /**
  */
 public class CohortCodePayload {
@@ -20,5 +25,17 @@ public class CohortCodePayload {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @JsonCreator
+    public static CohortCodePayload create(String jsonString) {
+        CohortCodePayload o = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            o = mapper.readValue(jsonString, CohortCodePayload.class);
+        } catch (IOException e) {
+            // handle
+        }
+        return o;
     }
 }

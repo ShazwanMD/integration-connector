@@ -1,5 +1,10 @@
 package my.edu.umk.pams.connector.payload;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+
 /**
  */
 public class CandidatePayload {
@@ -13,6 +18,9 @@ public class CandidatePayload {
     private String cohortCode;
     private String programCode;
     private String facultyCode;
+
+//    public CandidatePayload() {
+//    }
 
     public String getName() {
         return name;
@@ -77,4 +85,17 @@ public class CandidatePayload {
     public void setFacultyCode(String facultyCode) {
         this.facultyCode = facultyCode;
     }
+
+    @JsonCreator
+    public static CandidatePayload create(String jsonString) {
+        CandidatePayload o = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            o = mapper.readValue(jsonString, CandidatePayload.class);
+        } catch (IOException e) {
+            // handle
+        }
+        return o;
+    }
 }
+

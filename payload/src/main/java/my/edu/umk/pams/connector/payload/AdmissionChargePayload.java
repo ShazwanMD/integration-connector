@@ -1,5 +1,10 @@
 package my.edu.umk.pams.connector.payload;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+
 /**
  */
 public class AdmissionChargePayload {
@@ -48,4 +53,17 @@ public class AdmissionChargePayload {
     public void setOrdinal(Integer ordinal) {
         this.ordinal = ordinal;
     }
+
+    @JsonCreator
+    public static AdmissionChargePayload create(String jsonString) {
+        AdmissionChargePayload o = null;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            o = mapper.readValue(jsonString, AdmissionChargePayload.class);
+        } catch (IOException e) {
+            // handle
+        }
+        return o;
+    }
+
 }

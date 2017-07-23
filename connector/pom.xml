@@ -108,26 +108,6 @@
             <artifactId>spring-security-test</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version><!--$NO-MVN-MAN-VER$-->
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        <!-- we use spring web to kick-start the application in web.xml -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
         <!-- camel -->
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -139,7 +119,11 @@
             <artifactId>camel-quartz</artifactId>
             <version>${camel.version}</version>
         </dependency>
-
+        <!--<dependency>-->
+        <!--<groupId>org.apache.camel</groupId>-->
+        <!--<artifactId>camel-jackson</artifactId>-->
+        <!--<version>${camel.version}</version>-->
+        <!--</dependency>-->
         <!-- camel jms and activemq -->
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -245,6 +229,7 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.8.5</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

@@ -18,9 +18,9 @@ import my.edu.umk.pams.connector.sender.CandidateSender;
 
 @ContextConfiguration(classes = TestAppConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SenderTest extends AbstractJUnit4SpringContextTests {
+public class CandidateSenderTest extends AbstractJUnit4SpringContextTests {
 
-    public static final Logger LOG = LoggerFactory.getLogger(SenderTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(CandidateSenderTest.class);
 
     @Autowired
     private CandidateSender candidateSender;
@@ -38,7 +38,7 @@ public class SenderTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void testRoute() throws Exception {
-        LOG.debug("testing");
+        LOG.info("testing");
         CandidatePayload candidatePayload = new CandidatePayload();
         candidatePayload.setName("Ashfraf Wajidi");
         candidatePayload.setMatricNo("A177900");

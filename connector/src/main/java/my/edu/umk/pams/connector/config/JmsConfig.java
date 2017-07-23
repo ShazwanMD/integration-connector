@@ -3,6 +3,7 @@ package my.edu.umk.pams.connector.config;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
@@ -11,8 +12,7 @@ import org.springframework.jms.support.converter.MessageType;
 /**
  */
 @Configuration
-
-
+@EnableJms
 public class JmsConfig {
 
     @Bean
@@ -30,4 +30,11 @@ public class JmsConfig {
         return converter;
     }
 
+//    @Bean(name = "json-jackson")
+//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//    public JacksonDataFormat jacksonDataFormat(ObjectMapper objectMapper) {
+//        JacksonDataFormat jacksonDataFormat = new JacksonDataFormat();
+//        jacksonDataFormat.setAllowJmsType(true);
+//        return jacksonDataFormat;
+//    }
 }

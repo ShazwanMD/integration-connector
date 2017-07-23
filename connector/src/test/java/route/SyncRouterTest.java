@@ -1,11 +1,10 @@
 package route;
 
 import config.TestAppConfig;
-import my.edu.umk.pams.connector.processor.CandidateSyncProcessor;
+import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.properties.PropertiesComponent;
 import org.apache.camel.component.sql.SqlComponent;
 import org.junit.After;
 import org.junit.Before;
@@ -44,7 +43,7 @@ public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private CandidateSyncProcessor candidateSyncProcessor;
+    private CandidateQueueSyncProcessor candidateQueueSyncProcessor;
 
     @Before
     public void setUp() throws Exception {
@@ -62,7 +61,7 @@ public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
                 from("quartz://syncTimer?cron={{sampleCronExpression}}")
                         .to("sql:SELECT matric_no, name from in_cndt ?useIterator=true")
                         .bean("candidateMapper", "process")
-                        .process(candidateSyncProcessor)
+                        .process(candidateQueueSyncProcessor)
                         .end();
             }
         });
