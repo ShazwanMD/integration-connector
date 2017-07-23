@@ -5,7 +5,7 @@
 
     <groupId>my.edu.umk.pams</groupId>
     <artifactId>connector</artifactId>
-    <version>1.0</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
 
     <parent>
@@ -22,5 +22,6 @@
 
     <modules>
         <module>connector</module>
+        <module>payload</module>
     </modules>
 </project>
