@@ -12,8 +12,6 @@ import javax.sql.DataSource;
 
 import my.edu.umk.pams.connector.processor.CandidateSyncProcessor;
 
-/**
- */
 @Component
 public class ConnectorRoute extends RouteBuilder {
 
