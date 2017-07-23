@@ -1,7 +1,8 @@
 package my.edu.umk.pams.connector.route;
 
+import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.component.properties.PropertiesComponent;
+import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.sql.SqlComponent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,11 +29,19 @@ public class ConnectorRoute extends RouteBuilder {
     @Autowired
     private CandidateSyncProcessor candidateSyncProcessor;
 
+//    @Autowired
+//    private ActiveMQConnectionFactory connectionFactory;
+
+
     @Override
     public void configure() throws Exception {
 //        PropertiesComponent properties = new PropertiesComponent();
 //        properties.setLocation("classpath:connector.properties");
 //        getContext().addComponent("properties", properties);
+
+//        JmsComponent component = new JmsComponent();
+//        component.setConnectionFactory(connectionFactory);
+//        getContext().addComponent("jms", component);
 
         SqlComponent sqlComponent = new SqlComponent();
         sqlComponent.setDataSource(intakeDataSource);

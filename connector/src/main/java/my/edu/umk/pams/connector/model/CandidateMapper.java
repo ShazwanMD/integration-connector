@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import my.edu.umk.pams.connector.payload.CandidatePayload;
+
 /**
  */
 @Component
@@ -18,16 +20,17 @@ public class CandidateMapper {
     public CandidateMapper() {
     }
 
-    public List<Candidate> process(List<Map<String, Object>> result) {
+    public List<CandidatePayload> process(List<Map<String, Object>> result) {
         LOG.info("candidate mapper");
 
-        List<Candidate> codes = new ArrayList<Candidate>();
-        for (Map<String, Object> map : result) {
-            Candidate code = new Candidate();
-            code.setMatricNo((String) map.get("matric_no"));
-            code.setName((String) map.get("name"));
-            codes.add(code);
-        }
-        return codes;
+//        List<Candidate> codes = new ArrayList<Candidate>();
+//        for (Map<String, Object> map : result) {
+//            Candidate code = new Candidate();
+//            code.setMatricNo((String) map.get("matric_no"));
+//            code.setName((String) map.get("name"));
+//            codes.add(code);
+//        }
+//        return codes;
+        return null;
     }
 }

@@ -1,1 +1,5 @@
-``
+##Installation Steps
+- install https://activemq.apache.org/activemq-5150-release.html
+- http://localhost:8161
+- admin/admin
+- create queues  candidateQueue, cohortCodeQueue, programCodeQueue, facultyCodeQueue

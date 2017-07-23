@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
-import my.edu.umk.pams.connector.model.Candidate;
+import my.edu.umk.pams.connector.payload.CandidatePayload;
 
 @Component
 public class CandidateSyncProcessor implements Processor {
@@ -37,8 +37,8 @@ public class CandidateSyncProcessor implements Processor {
     @Override
     public void process(Exchange exchange) throws Exception {
         LOG.info("processing");
-        final Candidate[] candidates = exchange.getIn().getBody(Candidate[].class);
-        for (Candidate candidate : candidates) {
+        final CandidatePayload[] candidates = exchange.getIn().getBody(CandidatePayload[].class);
+        for (CandidatePayload candidate : candidates) {
             LOG.info("candidate: " + candidate);
         }
         // use REST API here
