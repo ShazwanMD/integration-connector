@@ -27,7 +27,7 @@ import javax.sql.DataSource;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
 
-    public static final Logger LOG = LoggerFactory.getLogger(SyncRouterTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SyncRouterTest.class);
 
     @Autowired
     private CamelContext camelContext;
