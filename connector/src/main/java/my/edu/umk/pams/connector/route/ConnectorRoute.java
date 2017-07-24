@@ -18,8 +18,6 @@ import my.edu.umk.pams.connector.Application;
 import my.edu.umk.pams.connector.model.CandidateMapper;
 import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
 
-/**
- */
 @Component
 public class ConnectorRoute extends RouteBuilder {
 

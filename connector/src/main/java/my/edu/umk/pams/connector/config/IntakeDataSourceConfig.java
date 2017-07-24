@@ -3,8 +3,12 @@ package my.edu.umk.pams.connector.config;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+<<<<<<< HEAD
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+=======
+import org.springframework.context.annotation.Primary;
+>>>>>>> ab63c8022abf00fc197db802e7229474344d2e79
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 

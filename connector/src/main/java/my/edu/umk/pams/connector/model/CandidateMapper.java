@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,7 @@ import my.edu.umk.pams.connector.payload.CandidatePayload;
  */
 @Component
 public class CandidateMapper {
-    public static final Logger LOG = LoggerFactory.getLogger(CandidateMapper.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CandidateMapper.class);
 
     public CandidateMapper() {
     }
