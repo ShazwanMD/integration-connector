@@ -107,23 +107,6 @@
             <artifactId>spring-security-test</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-<<<<<<< HEAD
-=======
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
->>>>>>> ab63c8022abf00fc197db802e7229474344d2e79
         <!-- camel -->
         <dependency>
             <groupId>org.apache.camel</groupId>
@@ -394,57 +377,6 @@
                 <configuration>
                     <warName>connector</warName>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sql-maven-plugin</artifactId>
-                <version>1.5</version>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgresql.version}</version>
-                    </dependency>
-                </dependencies>
-
-                <executions>
-                    <execution>
-                        <id>db-drop</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <driver>org.postgresql.Driver</driver>
-                            <url>jdbc:postgresql://localhost:5432/postgres</url>
-                            <settingsKey>postgres-dev</settingsKey>
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <srcFile>src/test/resources/schema.sql</srcFile>
-                            </srcFiles>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>db-seed</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>execute</goal>
-                        </goals>
-                        <configuration>
-                            <driver>org.postgresql.Driver</driver>
-                            <url>jdbc:postgresql://localhost:5432/connector</url>
-                            <username>connector</username>
-                            <password>abc123</password>
-
-                            <autocommit>true</autocommit>
-                            <srcFiles>
-                                <!--<srcFile>src/test/resources/ddl/DROP.sql</srcFile>-->
-                                <!--<srcFile>src/test/resources/ddl/CREATE.sql</srcFile>-->
-                            </srcFiles>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
         </plugins>

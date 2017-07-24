@@ -55,12 +55,12 @@ public class ConnectorRoute extends RouteBuilder {
         sqlComponent.setDataSource(intakeDataSource);
         getContext().addComponent("sql", sqlComponent);
 
-        from("jms:queue:candidateQueue")
-                .routeId("candidateQueueRoute")
-                .log("test")
-                .bean(candidateMapper, "map")
-                .process(candidateQueueSyncProcessor)
-                .end();
+//        from("jms:queue:candidateQueue")
+//                .routeId("candidateQueueRoute")
+//                .log("test")
+//                .bean(candidateMapper, "map")
+//                .process(candidateQueueSyncProcessor)
+//                .end();
 
 //        from("quartz://syncTimer?cron={{sampleCronExpression}}")
 //                .to("sql:SELECT matric_no, name from in_cndt ?useIterator=true")
