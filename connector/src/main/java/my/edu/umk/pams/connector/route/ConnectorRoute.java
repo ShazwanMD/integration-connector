@@ -1,8 +1,10 @@
 package my.edu.umk.pams.connector.route;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.sql.SqlComponent;
+import org.apache.camel.model.dataformat.JsonLibrary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import javax.sql.DataSource;
 
 import my.edu.umk.pams.connector.Application;
 import my.edu.umk.pams.connector.model.CandidateMapper;
+import my.edu.umk.pams.connector.payload.CandidatePayload;
 import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
 
 @Component
@@ -41,7 +44,7 @@ public class ConnectorRoute extends RouteBuilder {
     private CandidateMapper candidateMapper;
 
     @PostConstruct
-    public void postConstruct(){
+    public void postConstruct() {
         LOG.info("Loading ConnectorRoute");
     }
 
@@ -51,21 +54,14 @@ public class ConnectorRoute extends RouteBuilder {
         component.setConnectionFactory(connectionFactory);
         getContext().addComponent("jms", component);
 
-        SqlComponent sqlComponent = new SqlComponent();
-        sqlComponent.setDataSource(intakeDataSource);
-        getContext().addComponent("sql", sqlComponent);
-
-//        from("jms:queue:candidateQueue")
-//                .routeId("candidateQueueRoute")
-//                .log("test")
-//                .bean(candidateMapper, "map")
-//                .process(candidateQueueSyncProcessor)
-//                .end();
-
-//        from("quartz://syncTimer?cron={{sampleCronExpression}}")
-//                .to("sql:SELECT matric_no, name from in_cndt ?useIterator=true")
-//                .bean("candidateMapper", "process")
-//                .process(candidateSyncProcessor)
-//                .end();
+        from("jms:queue:candidateQueue")
+                .routeId("candidateQueueRoute")
+                .log("test")
+                .bean(candidateMapper, "map")
+                .marshal().json(JsonLibrary.Jackson, CandidatePayload.class)
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http4://localhost:8090/api/integration/candidate")
+                .end();
     }
 }

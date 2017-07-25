@@ -118,12 +118,21 @@
             <artifactId>camel-quartz</artifactId>
             <version>${camel.version}</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.apache.camel</groupId>-->
-        <!--<artifactId>camel-jackson</artifactId>-->
-        <!--<version>${camel.version}</version>-->
-        <!--</dependency>-->
-        <!-- camel jms and activemq -->
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-http4</artifactId>
+            <version>${camel.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-sql</artifactId>
@@ -324,28 +333,28 @@
         <finalName>connector</finalName>
 
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attach-artifact</goal>
-                        </goals>
-                        <configuration>
-                            <artifacts>
-                                <artifact>
-                                    <file>target/classes/features.xml</file>
-                                    <type>xml</type>
-                                    <classifier>features</classifier>
-                                </artifact>
-                            </artifacts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>build-helper-maven-plugin</artifactId>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>attach-artifacts</id>-->
+            <!--<phase>package</phase>-->
+            <!--<goals>-->
+            <!--<goal>attach-artifact</goal>-->
+            <!--</goals>-->
+            <!--<configuration>-->
+            <!--<artifacts>-->
+            <!--<artifact>-->
+            <!--<file>target/classes/features.xml</file>-->
+            <!--<type>xml</type>-->
+            <!--<classifier>features</classifier>-->
+            <!--</artifact>-->
+            <!--</artifacts>-->
+            <!--</configuration>-->
+            <!--</execution>-->
+            <!--</executions>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
