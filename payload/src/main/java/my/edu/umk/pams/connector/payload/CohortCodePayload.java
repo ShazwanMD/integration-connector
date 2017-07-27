@@ -10,6 +10,7 @@ import java.io.IOException;
 public class CohortCodePayload {
     private String code;
     private String description;
+    private ProgramCodePayload programCode;
 
     public String getCode() {
         return code;
@@ -25,6 +26,14 @@ public class CohortCodePayload {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ProgramCodePayload getProgramCode() {
+        return programCode;
+    }
+
+    public void setProgramCode(ProgramCodePayload programCode) {
+        this.programCode = programCode;
     }
 
     @JsonCreator

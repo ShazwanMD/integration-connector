@@ -7,10 +7,9 @@ import java.io.IOException;
 
 /**
  */
-public class ProgramCodePayload {
+public class ResidencyCodePayload {
     private String code;
     private String description;
-    private FacultyCodePayload facultyCode;
 
     public String getCode() {
         return code;
@@ -28,24 +27,15 @@ public class ProgramCodePayload {
         this.description = description;
     }
 
-    public FacultyCodePayload getFacultyCode() {
-        return facultyCode;
-    }
-
-    public void setFacultyCode(FacultyCodePayload facultyCode) {
-        this.facultyCode = facultyCode;
-    }
-
     @JsonCreator
-    public static ProgramCodePayload create(String jsonString) {
-        ProgramCodePayload o = null;
+    public static ResidencyCodePayload create(String jsonString) {
+        ResidencyCodePayload o = null;
         try {
             ObjectMapper mapper = new ObjectMapper();
-            o = mapper.readValue(jsonString, ProgramCodePayload.class);
+            o = mapper.readValue(jsonString, ResidencyCodePayload.class);
         } catch (IOException e) {
             // handle
         }
         return o;
     }
-
 }

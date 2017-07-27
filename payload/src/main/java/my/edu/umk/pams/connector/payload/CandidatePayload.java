@@ -19,9 +19,6 @@ public class CandidatePayload {
     private String programCode;
     private String facultyCode;
 
-//    public CandidatePayload() {
-//    }
-
     public String getName() {
         return name;
     }

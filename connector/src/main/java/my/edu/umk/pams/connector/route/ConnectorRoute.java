@@ -57,8 +57,6 @@ public class ConnectorRoute extends RouteBuilder {
         from("jms:queue:candidateQueue")
                 .routeId("candidateQueueRoute")
                 .log("incoming candidate")
-//                .bean(candidateMapper, "map")
-//                .marshal().json(JsonLibrary.Jackson, CandidatePayload.class)
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/candidate")

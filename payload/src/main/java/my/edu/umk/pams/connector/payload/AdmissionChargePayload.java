@@ -8,6 +8,7 @@ import java.io.IOException;
 /**
  */
 public class AdmissionChargePayload {
+
     private String academicSessionCode;
     private String cohortCode;
     private String residencyCode;
