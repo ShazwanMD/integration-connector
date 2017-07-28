@@ -1,0 +1,3 @@
+mvn install -DperformRelease=true -DcreateChecksum=true
+
+mvn deploy:deploy-file -DgroupId=my.edu.umk.pams -DartifactId=connector-payload -Dversion=0.1.0 -Dpackaging=jar -DgeneratePom=true -Dfile=connector-payload-0.1.0.jar -Dsources=connector-payload-0.1.0-sources.jar -Durl=ftp://canang.com.my -DrepositoryId=canang-maven-repository
