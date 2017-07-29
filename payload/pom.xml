@@ -108,8 +108,23 @@
                 </configuration>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-ftp</artifactId>
+                <version>1.0-beta-6</version>
+            </extension>
+        </extensions>
     </build>
 
+
+    <distributionManagement>
+        <repository>
+            <id>canang-maven-repository</id>
+            <name>Canang Maven Repository</name>
+            <url>ftp://canang.com.my/</url>
+        </repository>
+    </distributionManagement>
 
     <profiles></profiles>
 
