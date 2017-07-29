@@ -22,6 +22,5 @@
 
     <modules>
         <module>connector</module>
-        <module>payload</module>
     </modules>
 </project>
