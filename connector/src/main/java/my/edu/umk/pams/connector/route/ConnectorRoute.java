@@ -27,21 +27,7 @@ public class ConnectorRoute extends RouteBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectorRoute.class);
 
     @Autowired
-    @Qualifier(value = "intakeDataSource")
-    private DataSource intakeDataSource;
-
-    @Autowired
-    @Qualifier(value = "intakeJdbcTemplate")
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private CandidateQueueSyncProcessor candidateQueueSyncProcessor;
-
-    @Autowired
     private ConnectionFactory connectionFactory;
-
-    @Autowired
-    private CandidateMapper candidateMapper;
 
     @PostConstruct
     public void postConstruct() {
@@ -59,7 +45,23 @@ public class ConnectorRoute extends RouteBuilder {
                 .log("incoming candidate")
                 .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-                .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/candidate")
+                .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates")
+                .end();
+
+        from("jms:queue:programCodeQueue")
+                .routeId("programCodeQueue")
+                .log("incoming program code")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
+                .end();
+
+        from("jms:queue:facultyCodeQueue")
+                .routeId("facultyCodeQueue")
+                .log("incoming faculty code")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
                 .end();
     }
 }

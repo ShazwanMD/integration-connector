@@ -1,4 +1,4 @@
-package my.edu.umk.pams.connector.sender;
+package sender;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public class CandidateSender {
 
     public void send(String destination, CandidatePayload payload) {
         jmsTemplate.convertAndSend(destination, payload);
-        LOG.debug("message sent");
+        LOG.debug("candidate sent");
     }
 }
 

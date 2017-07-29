@@ -12,18 +12,22 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.UUID;
+
 import config.TestAppConfig;
-import my.edu.umk.pams.connector.payload.CandidatePayload;
+import my.edu.umk.pams.connector.payload.FacultyCodePayload;
+import my.edu.umk.pams.connector.payload.ProgramCodePayload;
 import sender.CandidateSender;
+import sender.ProgramCodeSender;
 
 @ContextConfiguration(classes = TestAppConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CandidateSenderTest extends AbstractJUnit4SpringContextTests {
+public class ProgramCodeSenderTest extends AbstractJUnit4SpringContextTests {
 
-    public static final Logger LOG = LoggerFactory.getLogger(CandidateSenderTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(ProgramCodeSenderTest.class);
 
     @Autowired
-    private CandidateSender candidateSender;
+    private ProgramCodeSender programCodeSender;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -38,16 +42,17 @@ public class CandidateSenderTest extends AbstractJUnit4SpringContextTests {
 
     @Test
     public void testRoute() throws Exception {
-        LOG.info("testing");
-        CandidatePayload candidatePayload = new CandidatePayload();
-        candidatePayload.setName("Ashfraf Wajidi");
-        candidatePayload.setMatricNo("A177900");
-        candidatePayload.setCohortCode("ABC");
-        candidatePayload.setFacultyCode("ABC");
-        candidatePayload.setProgramCode("ABC");
-        candidatePayload.setEmail("ashraf@umk.edu.my");
-        candidatePayload.setMobile("012920011");
-        candidatePayload.setFax("1212");
-        candidateSender.send("candidateQueue", candidatePayload);
+        LOG.info("testing program code payload");
+
+        FacultyCodePayload faculty = new FacultyCodePayload();
+        faculty.setCode("FKP");
+        faculty.setDescription("FKP");
+
+        ProgramCodePayload program = new ProgramCodePayload();
+        program.setCode("XYZ-" + UUID.randomUUID().toString().substring(3));
+        program.setDescription("New Program");
+        program.setFacultyCode(faculty);
+
+        programCodeSender.send("programCodeQueue", program);
     }
 }

@@ -1,0 +1,8 @@
+{
+  "code": "ABC-123",
+  "description": "new program",
+  "facultyCode": {
+    "code": "FKP",
+    "description": "FKP"
+  }
+}

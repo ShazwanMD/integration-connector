@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import config.TestAppConfig;
 import my.edu.umk.pams.connector.payload.CandidatePayload;
-import my.edu.umk.pams.connector.sender.CandidateSender;
+import sender.CandidateSender;
 
 @ContextConfiguration(classes = TestAppConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)

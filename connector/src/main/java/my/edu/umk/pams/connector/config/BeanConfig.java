@@ -14,7 +14,7 @@ public class BeanConfig {
 
 //    @Bean
 //    public ConnectionFactory connectionFactory() {
-//        final ActiveMQConnectionFactory activeMQConncetionFactory = new ActiveMQConnectionFactory();
+//        final ActiveMQConnectionFactory N = new ActiveMQConnectionFactory();
 //        activeMQConncetionFactory.setBrokerURL("tcp://localhost:61616");
 //        activeMQConncetionFactory.setUseAsyncSend(true);
 //        activeMQConncetionFactory.setClientID("pams-camel");
