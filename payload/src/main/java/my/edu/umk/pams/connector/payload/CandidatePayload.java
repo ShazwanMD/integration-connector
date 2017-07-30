@@ -19,7 +19,8 @@ public class CandidatePayload {
     private String cohortCode;
     private String programCode;
     private String facultyCode;
-    private StudyModePayload studyModeCode;
+    private StudyModePayload studyMode;
+    private ResidencyCodePayload residencyCode;
 
     //Address
     private AddressPayload primaryAddress;
@@ -123,15 +124,23 @@ public class CandidatePayload {
 		this.supervisorCode = supervisorCode;
 	}
 
-	public StudyModePayload getStudyModeCode() {
-		return studyModeCode;
+	public StudyModePayload getStudyMode() {
+		return studyMode;
 	}
 
-	public void setStudyModeCode(StudyModePayload studyModeCode) {
-		this.studyModeCode = studyModeCode;
+	public void setStudyMode(StudyModePayload studyMode) {
+		this.studyMode = studyMode;
 	}
 
-	@JsonCreator
+    public ResidencyCodePayload getResidencyCode() {
+        return residencyCode;
+    }
+
+    public void setResidencyCode(ResidencyCodePayload residencyCode) {
+        this.residencyCode = residencyCode;
+    }
+
+    @JsonCreator
     public static CandidatePayload create(String jsonString) {
         CandidatePayload o = null;
         try {
