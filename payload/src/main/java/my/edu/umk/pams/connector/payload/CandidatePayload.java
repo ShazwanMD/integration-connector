@@ -11,6 +11,7 @@ public class CandidatePayload {
     private String name;
     private String matricNo;
     private String email;
+    private String phone;
     private String mobile;
     private String fax;
 
@@ -18,6 +19,9 @@ public class CandidatePayload {
     private String cohortCode;
     private String programCode;
     private String facultyCode;
+
+    private AddressPayload primaryAddress;
+    private AddressPayload secondaryAddress;
 
     public String getName() {
         return name;
@@ -41,6 +45,14 @@ public class CandidatePayload {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getMobile() {
@@ -81,6 +93,22 @@ public class CandidatePayload {
 
     public void setFacultyCode(String facultyCode) {
         this.facultyCode = facultyCode;
+    }
+
+    public AddressPayload getPrimaryAddress() {
+        return primaryAddress;
+    }
+
+    public void setPrimaryAddress(AddressPayload primaryAddress) {
+        this.primaryAddress = primaryAddress;
+    }
+
+    public AddressPayload getSecondaryAddress() {
+        return secondaryAddress;
+    }
+
+    public void setSecondaryAddress(AddressPayload secondaryAddress) {
+        this.secondaryAddress = secondaryAddress;
     }
 
     @JsonCreator
