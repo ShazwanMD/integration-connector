@@ -22,6 +22,9 @@ public class CandidatePayload {
 
     private AddressPayload primaryAddress;
     private AddressPayload secondaryAddress;
+    
+    private String supervisorCode;
+    private String studyModeCode;
 
     public String getName() {
         return name;
@@ -111,7 +114,23 @@ public class CandidatePayload {
         this.secondaryAddress = secondaryAddress;
     }
 
-    @JsonCreator
+    public String getSupervisorCode() {
+		return supervisorCode;
+	}
+
+	public void setSupervisorCode(String supervisorCode) {
+		this.supervisorCode = supervisorCode;
+	}
+
+	public String getStudyModeCode() {
+		return studyModeCode;
+	}
+
+	public void setStudyModeCode(String studyModeCode) {
+		this.studyModeCode = studyModeCode;
+	}
+
+	@JsonCreator
     public static CandidatePayload create(String jsonString) {
         CandidatePayload o = null;
         try {
