@@ -11,6 +11,7 @@ public class ProgramCodePayload {
     private String code;
     private String description;
     private FacultyCodePayload facultyCode;
+    private ProgramLevelPayload programLevel;
 
     public String getCode() {
         return code;
@@ -34,6 +35,14 @@ public class ProgramCodePayload {
 
     public void setFacultyCode(FacultyCodePayload facultyCode) {
         this.facultyCode = facultyCode;
+    }
+
+    public ProgramLevelPayload getProgramLevel() {
+        return programLevel;
+    }
+
+    public void setProgramLevel(ProgramLevelPayload programLevel) {
+        this.programLevel = programLevel;
     }
 
     @JsonCreator
