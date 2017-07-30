@@ -3,16 +3,14 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>my.edu.umk.pams</groupId>
     <artifactId>connector-payload</artifactId>
     <packaging>jar</packaging>
     <version>0.1.0</version>
-    <!--<parent>-->
-        <!--<groupId>my.edu.umk.pams</groupId>-->
-        <!--<artifactId>connector</artifactId>-->
-        <!--<version>0.1.0</version>-->
-    <!--</parent>-->
-
+    <parent>
+        <groupId>my.edu.umk.pams</groupId>
+        <artifactId>connector</artifactId>
+        <version>0.1.0</version>
+    </parent>
     <properties>
         <aspectj.version>1.7.4</aspectj.version>
         <log4j.version>2.7</log4j.version>
