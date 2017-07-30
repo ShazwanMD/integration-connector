@@ -118,6 +118,8 @@
         </repository>
     </distributionManagement>
 
-    <profiles></profiles>
+    <profiles>
+
+    </profiles>
 
 </project>
