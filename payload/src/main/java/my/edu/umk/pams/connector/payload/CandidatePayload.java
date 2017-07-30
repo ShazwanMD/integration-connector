@@ -19,6 +19,7 @@ public class CandidatePayload {
     private String cohortCode;
     private String programCode;
     private String facultyCode;
+    private StudyModePayload studyModeCode;
 
     private AddressPayload primaryAddress;
     private AddressPayload secondaryAddress;
@@ -111,7 +112,16 @@ public class CandidatePayload {
         this.secondaryAddress = secondaryAddress;
     }
 
-    @JsonCreator
+
+	public StudyModePayload getStudyModeCode() {
+		return studyModeCode;
+	}
+
+	public void setStudyModeCode(StudyModePayload studyModeCode) {
+		this.studyModeCode = studyModeCode;
+	}
+
+	@JsonCreator
     public static CandidatePayload create(String jsonString) {
         CandidatePayload o = null;
         try {
