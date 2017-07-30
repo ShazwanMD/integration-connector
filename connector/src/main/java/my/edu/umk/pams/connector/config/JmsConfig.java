@@ -12,7 +12,6 @@ import org.springframework.jms.support.converter.MessageType;
 /**
  */
 @Configuration
-@EnableJms
 public class JmsConfig {
 
     @Bean
