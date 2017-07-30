@@ -21,9 +21,12 @@ public class CandidatePayload {
     private String facultyCode;
     private StudyModePayload studyModeCode;
 
+    //Address
     private AddressPayload primaryAddress;
     private AddressPayload secondaryAddress;
-
+    
+    private String supervisorCode;
+ 
     public String getName() {
         return name;
     }
@@ -112,6 +115,13 @@ public class CandidatePayload {
         this.secondaryAddress = secondaryAddress;
     }
 
+    public String getSupervisorCode() {
+		return supervisorCode;
+	}
+
+	public void setSupervisorCode(String supervisorCode) {
+		this.supervisorCode = supervisorCode;
+	}
 
 	public StudyModePayload getStudyModeCode() {
 		return studyModeCode;
