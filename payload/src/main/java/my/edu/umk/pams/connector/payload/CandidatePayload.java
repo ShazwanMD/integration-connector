@@ -20,6 +20,8 @@ public class CandidatePayload {
     private String programCode;
     private String facultyCode;
     private StudyModePayload studyModeCode;
+    private BigDecimal balance;
+    private boolean outstanding;
 
     //Address
     private AddressPayload primaryAddress;
@@ -129,6 +131,22 @@ public class CandidatePayload {
 
 	public void setStudyModeCode(StudyModePayload studyModeCode) {
 		this.studyModeCode = studyModeCode;
+	}
+	
+	public BigDecimal getBalance() {
+		return balance;
+	}
+
+	public void setBalance(BigDecimal balance) {
+		this.balance = balance;
+	}
+
+	public boolean isOutstanding() {
+		return outstanding;
+	}
+
+	public void setOutstanding(boolean outstanding) {
+		this.outstanding = outstanding;
 	}
 
 	@JsonCreator
