@@ -9,6 +9,7 @@ public class IntakePayload {
 
     private IntakeSessionCodePayload intakeSession;
     private List<ProgramCodePayload> offeredProgramCodes;
+    private String cohort;
 
     public IntakeSessionCodePayload getIntakeSession() {
         return intakeSession;
@@ -25,4 +26,13 @@ public class IntakePayload {
     public void setOfferedProgramCodes(List<ProgramCodePayload> offeredProgramCodes) {
         this.offeredProgramCodes = offeredProgramCodes;
     }
+
+	public String getCohort() {
+		return cohort;
+	}
+
+	public void setCohort(String cohort) {
+		this.cohort = cohort;
+	}
+    
 }
