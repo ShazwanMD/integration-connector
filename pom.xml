@@ -21,7 +21,7 @@
     <description>PAMS Connector Project</description>
 
     <modules>
-        <module>connector</module>
         <module>payload</module>
+        <module>connector</module>
     </modules>
 </project>
