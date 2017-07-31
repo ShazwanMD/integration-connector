@@ -63,5 +63,13 @@ public class ConnectorRoute extends RouteBuilder {
                 .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
                 .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
                 .end();
+        
+        from("jms:queue:accountQueue")
+		        .routeId("accountQueue")
+		        .log("incoming Account Student")
+		        .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+		        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/studentAccounts")
+		        .end();
     }
 }
