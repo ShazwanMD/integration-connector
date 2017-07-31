@@ -1,3 +1,7 @@
 mvn install -DperformRelease=true -DcreateChecksum=true
 
-mvn deploy:deploy-file -DgroupId=my.edu.umk.pams -DartifactId=connector-payload -Dversion=0.1.0 -Dpackaging=jar -DgeneratePom=true -Dfile=target/connector-payload-0.1.0.jar -Dsources=target/connector-payload-0.1.0-sources.jar -Durl=ftp://canang.com.my -DrepositoryId=canang-maven-repository
+mvn deploy:deploy-file -DgroupId=my.edu.umk.pams -DartifactId=connector-payload -Dversion=0.1.0 -Dpackaging=jar -DgeneratePom=true -Dfile=target/connector-payload-0.1.0.jar -Dsour=target/connec   tor-payload-0.1.0-sources.jar -Durl=ftp://canang.com.my -DrepositoryId=canang-maven-repositor
+
+
+
+mvn install:install-file -Dfile=ojdbc6-11.2.0.3.jar -Dpackaging=jar -DgroupId=com.oracle -DartifactId=ojdbc6 -Dversion=11.2.0.3
