@@ -1,5 +1,6 @@
 package my.edu.umk.pams.connector.route;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.jms.JmsComponent;
 import org.apache.camel.component.sql.SqlComponent;
@@ -41,33 +42,33 @@ public class ConnectorRoute extends RouteBuilder {
         sqlComponent.setDataSource(imsDataSource);
         getContext().addComponent("sql", sqlComponent);
 
-        from("quartz://staffSyncTimer?cron={{staffSyncCron}}")
-                .to("sql:SELECT SM_STAFF_ID, SM_STAFF_NAME FROM CMSADMIN.STAFF_MAIN?useIterator=true")
-                .bean("staffMapper", "process")
+//        from("quartz://staffSyncTimer?cron={{staffSyncCron}}")
+//                .to("sql:SELECT SM_STAFF_ID, SM_STAFF_NAME FROM CMSADMIN.STAFF_MAIN?useIterator=true")
+//                .bean("staffMapper", "process")
+//                .end();
+
+        from("jms:queue:candidateQueue")
+                .routeId("candidateQueueRoute")
+                .log("incoming candidate")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates")
                 .end();
 
-//        from("jms:queue:candidateQueue")
-//                .routeId("candidateQueueRoute")
-//                .log("incoming candidate")
-//                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-//                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-//                .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates")
-//                .end();
-//
-//        from("jms:queue:programCodeQueue")
-//                .routeId("programCodeQueue")
-//                .log("incoming program code")
-//                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-//                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-//                .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
-//                .end();
-//
-//        from("jms:queue:facultyCodeQueue")
-//                .routeId("facultyCodeQueue")
-//                .log("incoming faculty code")
-//                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-//                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-//                .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
-//                .end();
+        from("jms:queue:programCodeQueue")
+                .routeId("programCodeQueue")
+                .log("incoming program code")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
+                .end();
+
+        from("jms:queue:facultyCodeQueue")
+                .routeId("facultyCodeQueue")
+                .log("incoming faculty code")
+                .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+                .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+                .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
+                .end();
     }
 }
