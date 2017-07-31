@@ -154,43 +154,12 @@
             <artifactId>spring-boot-starter-activemq</artifactId>
             <version>1.4.0.RELEASE</version>
         </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>org.apache.activemq</groupId>-->
-        <!--<artifactId>artemis-jms-server</artifactId>-->
-        <!--<version>2.1.0</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>org.apache.activemq</groupId>-->
-        <!--<artifactId>activemq-spring</artifactId>-->
-        <!--<version>${activemq.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.activemq</groupId>-->
-        <!--<artifactId>activemq-kahadb-store</artifactId>-->
-        <!--<version>${activemq.version}</version>-->
-        <!--</dependency>-->
-
-        <!--&lt;!&ndash; ActiveMQ client &ndash;&gt;-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.activemq</groupId>-->
-        <!--<artifactId>activemq-client</artifactId>-->
-        <!--<version>${activemq.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.activemq</groupId>-->
-        <!--<artifactId>activemq-pool</artifactId>-->
-        <!--<version>${activemq.version}</version>-->
-        <!--</dependency>-->
-
-        <!-- xbean is required for ActiveMQ broker configuration in the spring xml file -->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.xbean</groupId>-->
-        <!--<artifactId>xbean-spring</artifactId>-->
-        <!--<version>${xbean.version}</version>-->
-        <!--</dependency>-->
-
+        <!-- https://mvnrepository.com/artifact/oracle/ojdbc6 -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
+        </dependency>
         <!-- logging -->
         <dependency>
             <groupId>commons-logging</groupId>
@@ -289,14 +258,14 @@
 
     <repositories>
         <repository>
-            <id>repo.spring.io.milestone</id>
-            <name>Spring Framework Maven Milestone Repository</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-        </repository>
-        <repository>
             <id>mvn-repo</id>
             <name>Mvn-Repo</name>
             <url>https://mvnrepository.com/artifact</url>
+        </repository>
+        <repository>
+            <id>repo.spring.io.milestone</id>
+            <name>Spring Framework Maven Milestone Repository</name>
+            <url>https://repo.spring.io/libs-milestone</url>
         </repository>
         <repository>
             <id>Activiti</id>
@@ -311,12 +280,12 @@
             <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jaspersoft-repo</url>
         </repository>
         <repository>
-            <id>CanangPublicRepo</id>
-            <url>http://canang.com.my/maven/</url>
-        </repository>
-        <repository>
             <id>Liferay</id>
             <url>https://repository.liferay.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>CanangPublicRepo</id>
+            <url>http://canang.com.my/maven/</url>
         </repository>
     </repositories>
 
