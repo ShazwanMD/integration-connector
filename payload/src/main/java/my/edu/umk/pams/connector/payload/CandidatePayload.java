@@ -21,7 +21,6 @@ public class CandidatePayload {
     private String programCode;
     private String facultyCode;
     
-    private StudyModePayload studyModeCode;
     private BigDecimal balance;
     private boolean outstanding;
     
