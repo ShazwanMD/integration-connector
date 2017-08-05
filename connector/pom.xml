@@ -291,8 +291,7 @@
 
 
     <build>
-        <!-- Name of the generated WAR file -->
-        <finalName>connector</finalName>
+        <finalName>connector-${version}</finalName>
 
         <plugins>
             <!--<plugin>-->
