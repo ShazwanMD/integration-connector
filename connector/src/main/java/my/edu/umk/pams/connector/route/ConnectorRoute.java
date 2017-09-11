@@ -62,15 +62,15 @@ public class ConnectorRoute extends RouteBuilder {
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .end();*/
         
-        from("quartz://syncTimer?cron={{sampleCronExpression}}")
-        .from("sqlIms:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL")
-		.routeId("imsStaffQueue").log("incoming staff IMS")
-        .to("jms:queue:imsStaffQueue")
-        .bean("staffMapper", "process")
-        .process(staffSyncProcessor)
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-        .end();
+//        from("quartz://syncTimer?cron={{sampleCronExpression}}")
+//        .from("sqlIms:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL")
+//		.routeId("imsStaffQueue").log("incoming staff IMS")
+//        .to("jms:queue:imsStaffQueue")
+//        .bean("staffMapper", "process")
+//        .process(staffSyncProcessor)
+//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//        .end();
 
 		from("jms:queue:candidateQueue").routeId("candidateQueueRoute").log("incoming candidate")
 				.setHeader(Exchange.HTTP_METHOD, constant("POST"))
@@ -81,6 +81,17 @@ public class ConnectorRoute extends RouteBuilder {
 				.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 				.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes").end();
+		
+		
+		from("jms:queue:imsStaffQueue")
+		.routeId("imsStaffQueue")
+		.log("IMS Staff Queue")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
+		.end();
+		
+		
 		
 		from("jms:queue:facultyCodeQueue2")
 		.routeId("facultyCodeQueue2")
