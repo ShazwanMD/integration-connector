@@ -4,6 +4,7 @@ import my.edu.umk.pams.connector.config.AcademicDataSourceConfig;
 import my.edu.umk.pams.connector.config.AccountDataSourceConfig;
 import my.edu.umk.pams.connector.config.BeanConfig;
 import my.edu.umk.pams.connector.config.DataSourceConfig;
+import my.edu.umk.pams.connector.config.ImsDataSourceConfig;
 import my.edu.umk.pams.connector.config.IntakeDataSourceConfig;
 import my.edu.umk.pams.connector.config.JmsConfig;
 import my.edu.umk.pams.connector.route.ConnectorRoute;
@@ -30,6 +31,7 @@ import org.springframework.context.annotation.PropertySource;
         IntakeDataSourceConfig.class,
         AcademicDataSourceConfig.class,
         AccountDataSourceConfig.class,
+        ImsDataSourceConfig.class,
         JmsConfig.class
 })
 @PropertySource({"classpath:application.properties"})

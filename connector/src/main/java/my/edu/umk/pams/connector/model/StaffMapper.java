@@ -29,9 +29,9 @@ public class StaffMapper {
             String staffId = ((String) map.get("SM_STAFF_ID"));
             String staffName = ((String) map.get("SM_STAFF_NAME"));
 
-            System.out.println("staffId = " + staffId);
-            System.out.println("staffName = " + staffName);
-
+            System.out.println("staffId : "+staffId);
+            System.out.println("staffName : "+staffName);
+            
             StaffModel model = new StaffModel();
             model.setName(staffName);
             model.setStaffId(staffId);

@@ -2,6 +2,7 @@ package route;
 
 import config.TestAppConfig;
 import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
+import my.edu.umk.pams.connector.processor.StaffSyncProcessor;
 
 import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
@@ -37,6 +38,10 @@ public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
     @Autowired
     @Qualifier(value = "intakeDataSource")
     private DataSource intakeDataSource;
+    
+    @Autowired
+    @Qualifier(value = "imsDataSource")
+    private DataSource imsDataSource;
 
     @Autowired
     @Qualifier(value = "intakeJdbcTemplate")
@@ -44,6 +49,9 @@ public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
 
     @Autowired
     private CandidateQueueSyncProcessor candidateQueueSyncProcessor;
+    
+    @Autowired
+    private StaffSyncProcessor staffSyncProcessor;
 
     @Before
     public void setUp() throws Exception {
@@ -62,6 +70,16 @@ public class SyncRouterTest extends AbstractJUnit4SpringContextTests {
                         .to("sql:SELECT matric_no, name from in_cndt ?useIterator=true")
                         .bean("candidateMapper", "process")
                         .process(candidateQueueSyncProcessor)
+                        .end();
+                
+                SqlComponent imsSqlComponent = new SqlComponent();
+                imsSqlComponent.setDataSource(imsDataSource);
+                getContext().addComponent("sqlIms", imsSqlComponent);
+
+                from("quartz://syncTimer?cron={{sampleCronExpression}}")
+                        .to("sqlIms:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL ?useIterator=true")
+                        .bean("staffMapper", "process")
+                        .process(staffSyncProcessor)
                         .end();
             }
         });
