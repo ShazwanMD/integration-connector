@@ -20,12 +20,13 @@ public class CandidatePayload {
     private String cohortCode;
     private String programCode;
     private String facultyCode;
+
     
     private BigDecimal balance;
     private boolean outstanding;
     
     private StudyModePayload studyMode;
-    private ResidencyCodePayload residencyCode;
+    private NationalityCodePayload nationalityCode;
 
     //Address
     private AddressPayload primaryAddress;
@@ -153,14 +154,16 @@ public class CandidatePayload {
 		this.outstanding = outstanding;
 	}
 
-    public ResidencyCodePayload getResidencyCode() {
-        return residencyCode;
+    public NationalityCodePayload getNationalityCode() {
+        return nationalityCode;
     }
 
-    public void setResidencyCode(ResidencyCodePayload residencyCode) {
-        this.residencyCode = residencyCode;
+    public void setNationalityCode(NationalityCodePayload nationalityCode) {
+        this.nationalityCode = nationalityCode;
     }
 
+    
+    
     @JsonCreator
     public static CandidatePayload create(String jsonString) {
         CandidatePayload o = null;
