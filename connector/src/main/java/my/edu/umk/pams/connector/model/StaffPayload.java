@@ -3,12 +3,16 @@ package my.edu.umk.pams.connector.model;
 /**
  * Created by User on 7/31/2017.
  */
-public class StaffModel {
+public class StaffPayload {
 
     private String staffId;
     private String name;
+    
+    public StaffPayload() {
+		super();
+	}
 
-    public String getStaffId() {
+	public String getStaffId() {
         return staffId;
     }
 

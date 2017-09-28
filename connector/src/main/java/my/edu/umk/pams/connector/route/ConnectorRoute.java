@@ -15,11 +15,14 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.jms.ConnectionFactory;
 import javax.sql.DataSource;
+import javax.xml.bind.ValidationException;
 
 import my.edu.umk.pams.connector.Application;
 import my.edu.umk.pams.connector.model.CandidateMapper;
+import my.edu.umk.pams.connector.model.StaffMapper;
 import my.edu.umk.pams.connector.payload.CandidatePayload;
 import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
+import my.edu.umk.pams.connector.processor.ProgramCodeSyncProcessor;
 import my.edu.umk.pams.connector.processor.StaffSyncProcessor;
 
 @Component
@@ -32,6 +35,9 @@ public class ConnectorRoute extends RouteBuilder {
 	
 	 @Autowired
 	    private StaffSyncProcessor staffSyncProcessor;
+	 
+	 @Autowired
+	 private ProgramCodeSyncProcessor programCodeSyncProcessor;
 	 
 	 @Autowired
 	    @Qualifier(value = "imsDataSource")
@@ -52,25 +58,31 @@ public class ConnectorRoute extends RouteBuilder {
         imsSqlComponent.setDataSource(imsDataSource);
         getContext().addComponent("sqlIms", imsSqlComponent);
         
-        /*from("jms:queue:imsStaffQueue")
-		.from("quartz://syncTimer?cron={{sampleCronExpression}}")
-		.routeId("imsStaffQueue").log("incoming staff IMS")
-        .to("sqlIms:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL")
-        .bean("staffMapper", "process")
-        .process(staffSyncProcessor)
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        
+        
+        /*from("quartz://syncTimer?cron={{sampleCronExpression}}")
+        .to("sqlIms:SELECT SM_STAFF_ID,SM_STAFF_NAME from STAFF_ALL WHERE SM_STAFF_NAME LIKE '%HANIF%'?useIterator=true")
+        .bean("staffMapper","process")
+        .setProperty("staffId",body())
+        .setProperty("staffName",body())
+        .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
         .end();*/
         
-//        from("quartz://syncTimer?cron={{sampleCronExpression}}")
-//        .from("sqlIms:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL")
-//		.routeId("imsStaffQueue").log("incoming staff IMS")
-//        .to("jms:queue:imsStaffQueue")
-//        .bean("staffMapper", "process")
-//        .process(staffSyncProcessor)
-//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-//        .end();
+       from("quartz://syncTimer?cron={{sampleCronExpression}}")
+       .to("sqlIms:SELECT SM_STAFF_ID,SM_STAFF_NAME from STAFF_ALL WHERE SM_STAFF_NAME LIKE '%HANIF%'?useIterator=true")
+       .bean("staffMapper", "process")
+       .setProperty("staffId",body())
+       .setProperty("staffName",body())
+       .multicast().stopOnException()
+       .to("direct:academicImsStaff").end();
+        
+        from("direct:academicImsStaff")
+		.log("incoming staff ims")
+		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http://localhost:8080/api/integration/staff").end();
 
 		from("jms:queue:candidateQueue").routeId("candidateQueueRoute").log("incoming candidate")
 				.setHeader(Exchange.HTTP_METHOD, constant("POST"))
@@ -81,17 +93,6 @@ public class ConnectorRoute extends RouteBuilder {
 				.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 				.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 				.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes").end();
-		
-		
-		from("jms:queue:imsStaffQueue")
-		.routeId("imsStaffQueue")
-		.log("IMS Staff Queue")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
-		.end();
-		
-		
 		
 		from("jms:queue:facultyCodeQueue2")
 		.routeId("facultyCodeQueue2")

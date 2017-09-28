@@ -22,17 +22,15 @@ public class StaffMapper {
     public StaffMapper() {
     }
 
-    public List<StaffModel> process(List<Map<String, Object>> result) {
-        List<StaffModel> list = new ArrayList<StaffModel>();
+    public List<StaffPayload> process(List<Map<String, Object>> result) {
+        List<StaffPayload> list = new ArrayList<StaffPayload>();
 
         for (Map<String, Object> map : result) {
             String staffId = ((String) map.get("SM_STAFF_ID"));
             String staffName = ((String) map.get("SM_STAFF_NAME"));
-
-            System.out.println("staffId : "+staffId);
-            System.out.println("staffName : "+staffName);
-            
-            StaffModel model = new StaffModel();
+            System.out.println("staffId {}"+staffId);
+            System.out.println("staffName {}"+staffName);
+            StaffPayload model = new StaffPayload();
             model.setName(staffName);
             model.setStaffId(staffId);
             list.add(model);
