@@ -67,15 +67,7 @@ public class ConnectorRoute extends RouteBuilder {
  		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
  		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();
 
-		from("jms:queue:candidateQueue").routeId("candidateQueueRoute").log("incoming candidate")
-				.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-				.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-				.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates").end();
 
-		from("jms:queue:programCodeQueue").routeId("programCodeQueue").log("incoming program code")
-				.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-				.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-				.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes").end();
 		
 		
 		from("jms:queue:imsStaffQueue")
@@ -86,8 +78,47 @@ public class ConnectorRoute extends RouteBuilder {
 		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
 		.end();
 		
+		//Sending Multicast Candidate From Intake To Academic and Account
+		from("jms:queue:candidateQueue")
+		.routeId("candidateQueueRoute")
+		.log("incoming candidate")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("direct:academic","direct:account")
+		.end();
 		
+		from("direct:academic")
+		.log("Academic Candidate Route")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates").end();
+
+		from("direct:account")
+		.log("Account Candidate Route")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/candidates")
+		.end();
 		
+		//Admission Payload From Academic
+		from("jms:queue:AdmissionPayloadQueue")
+		.routeId("AdmissionPayloadQueue")
+		.log("Incoming AdmissionPayloadQueue")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/admissions")
+		.end();
+
+		//Sending Student Account From Account
+		from("jms:queue:accountQueue")
+		.routeId("accountQueue")
+		.log("incoming Account Student")
+		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/studentAccounts")
+		.end();
+		
+		//Testing Sending One To Many
 		from("jms:queue:facultyCodeQueue2")
 		.routeId("facultyCodeQueue2")
 		.log("Incoming Faculty Code")
@@ -140,10 +171,12 @@ public class ConnectorRoute extends RouteBuilder {
 		// .setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		// .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		// .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
+		
+//		from("jms:queue:programCodeQueue").routeId("programCodeQueue").log("incoming program code")
+//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes").end();
 
-		from("jms:queue:accountQueue").routeId("accountQueue").log("incoming Account Student")
-				.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
-				.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-				.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/studentAccounts").end();
+
 	}
 }
