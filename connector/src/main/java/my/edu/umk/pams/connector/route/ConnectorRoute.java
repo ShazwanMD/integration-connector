@@ -123,7 +123,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.routeId("facultyCodeQueue2")
 		.log("Incoming Faculty Code")
 		.multicast()
-		.to("direct:intake","direct:account")
+		.to("direct:intake","direct:accountFaculty")
 		.end();
 
 		from("direct:intake")
@@ -132,11 +132,28 @@ public class ConnectorRoute extends RouteBuilder {
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
 
-		from("direct:account")
+		from("direct:accountFaculty")
 		.log("account faculty code")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
+		.end();
+		
+		//Cohort Code Payload From Academic
+		from("jms:queue:CohortCodePayloadQueue")
+		.routeId("CohortCodePayloadQueue")
+		.log("Incoming CohortCodePayloadQueue Route")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/cohortCodes")
+		.end();
+		
+		from("jms:queue:programCodeQueue")
+		.routeId("programCodeQueue")
+		.log("incoming program code")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes")
 		.end();
 
 		// from("jms:queue:facultyCodeQueue")
@@ -172,10 +189,7 @@ public class ConnectorRoute extends RouteBuilder {
 		// .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		// .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
 		
-//		from("jms:queue:programCodeQueue").routeId("programCodeQueue").log("incoming program code")
-//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes").end();
+
 
 
 	}
