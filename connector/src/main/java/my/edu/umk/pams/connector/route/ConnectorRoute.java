@@ -155,6 +155,16 @@ public class ConnectorRoute extends RouteBuilder {
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes")
 		.end();
+		
+		from("jms:queue:GuardianPayloadQueue")
+		.routeId("GuardianPayloadQueue")
+		.log("incoming GuardianPayloadQueue")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/guardians")
+		.log("Finish GuardianPayloadQueue Routes")
+		.end();
+		
 
 		// from("jms:queue:facultyCodeQueue")
 		// .routeId("facultyCodeQueue")
