@@ -27,6 +27,7 @@ public class CandidatePayload {
     
     private StudyModePayload studyMode;
     private NationalityCodePayload nationalityCode;
+    private UserPayload userPayload;
 
     //Address
     private AddressPayload primaryAddress;
@@ -161,10 +162,16 @@ public class CandidatePayload {
     public void setNationalityCode(NationalityCodePayload nationalityCode) {
         this.nationalityCode = nationalityCode;
     }
+    
+    public UserPayload getUserPayload() {
+		return userPayload;
+	}
 
-    
-    
-    @JsonCreator
+	public void setUserPayload(UserPayload userPayload) {
+		this.userPayload = userPayload;
+	}
+
+	@JsonCreator
     public static CandidatePayload create(String jsonString) {
         CandidatePayload o = null;
         try {
