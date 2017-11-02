@@ -67,9 +67,6 @@ public class ConnectorRoute extends RouteBuilder {
  		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
  		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();
 
-
-		
-		
 		from("jms:queue:imsStaffQueue")
 		.routeId("imsStaffQueue")
 		.log("IMS Staff Queue")
@@ -78,9 +75,12 @@ public class ConnectorRoute extends RouteBuilder {
 		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
 		.end();
 		
+		
+		
+		
 		//Sending Multicast Candidate From Intake To Academic and Account
-		from("jms:queue:candidateQueue")
-		.routeId("candidateQueueRoute")
+		from("jms:queue:candidateQueue3")
+		.routeId("candidateQueueRoute3")
 		.log("incoming candidate")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -140,20 +140,33 @@ public class ConnectorRoute extends RouteBuilder {
 		.end();
 		
 		//Cohort Code Payload From Academic
-		from("jms:queue:CohortCodePayloadQueue")
-		.routeId("CohortCodePayloadQueue")
-		.log("Incoming CohortCodePayloadQueue Route")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/cohortCodes")
-		.end();
+//		from("jms:queue:CohortCodePayloadQueue")
+//		.routeId("CohortCodePayloadQueue")
+//		.log("Incoming CohortCodePayloadQueue Route")
+//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/cohortCodes")
+//		.end();
 		
-		from("jms:queue:programCodeQueue")
-		.routeId("programCodeQueue")
-		.log("incoming program code")
+		//Program
+		from("jms:queue:programCodeQueue2")
+		.routeId("programCodeQueue2")
+		.log("incoming program code2")
+		.multicast()
+		.to("direct:intakeProgram","direct:accountProgram")
+		.end();
+
+		from("direct:intakeProgram")
+		.log("intake faculty code")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes")
+		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes").end();
+
+		from("direct:accountProgram")
+		.log("account faculty code")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
 		.end();
 		
 		from("jms:queue:GuardianPayloadQueue")
