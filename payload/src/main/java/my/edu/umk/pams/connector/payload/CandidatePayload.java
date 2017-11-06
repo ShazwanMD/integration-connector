@@ -26,6 +26,7 @@ public class CandidatePayload {
     private boolean outstanding;
     
     private StudyModePayload studyMode;
+    private StudyCenterPayload studyCenter;
     private NationalityCodePayload nationalityCode;
     private UserPayload userPayload;
 
@@ -138,7 +139,15 @@ public class CandidatePayload {
 	public void setStudyMode(StudyModePayload studyMode) {
 		this.studyMode = studyMode;
 	}
-	
+		
+	public StudyCenterPayload getStudyCenter() {
+		return studyCenter;
+	}
+
+	public void setStudyCenter(StudyCenterPayload studyCenter) {
+		this.studyCenter = studyCenter;
+	}
+
 	public BigDecimal getBalance() {
 		return balance;
 	}
