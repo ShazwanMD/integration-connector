@@ -52,16 +52,16 @@ public class ConnectorRoute extends RouteBuilder {
         imsSqlComponent.setDataSource(imsDataSource);
         getContext().addComponent("sqlIms", imsSqlComponent);
         
-        
-        from("quartz://syncTimer?cron={{sampleCronExpression}}")
-        .to("sqlIms:SELECT SM_STAFF_ID,SM_STAFF_NAME from STAFF_ALL WHERE SM_STAFF_NAME LIKE '%HANIF%'?useIterator=true")
-        .bean("staffMapper", "process")
-        .setProperty("staffId",body())
-        .setProperty("staffName",body())
-        .multicast().stopOnException()
-        .to("direct:academicImsStaff").end();
+//        
+//        from("quartz://syncTimer?cron={{sampleCronExpression}}")
+//        .to("sqlIms:SELECT SM_STAFF_ID,SM_STAFF_NAME from STAFF_ALL WHERE SM_STAFF_NAME LIKE '%HANIF%'?useIterator=true")
+//        .bean("staffMapper", "process")
+//        .setProperty("staffId",body())
+//        .setProperty("staffName",body())
+//        .multicast().stopOnException()
+//        .to("direct:academicTestImsStaff").end();
          
-         from("direct:academicImsStaff")
+         from("jms:queue:academicTestStaffQueue2")
  		.log("incoming staff ims")
  		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
  		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -101,17 +101,17 @@ public class ConnectorRoute extends RouteBuilder {
 		.end();
 		
 		//Admission Payload From Academic
-		from("jms:queue:AdmissionPayloadQueue")
-		.routeId("AdmissionPayloadQueue")
-		.log("Incoming AdmissionPayloadQueue")
+		from("jms:queue:AdmissionPayloadQueue1")
+		.routeId("AdmissionPayloadQueue1")
+		.log("Incoming AdmissionPayloadQueue1")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/admissions")
 		.end();
 
 		//Sending Student Account From Account
-		from("jms:queue:accountQueue")
-		.routeId("accountQueue")
+		from("jms:queue:accountQueue1")
+		.routeId("accountQueue1")
 		.log("incoming Account Student")
 		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -139,15 +139,6 @@ public class ConnectorRoute extends RouteBuilder {
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
 		.end();
 		
-		//Cohort Code Payload From Academic
-//		from("jms:queue:CohortCodePayloadQueue")
-//		.routeId("CohortCodePayloadQueue")
-//		.log("Incoming CohortCodePayloadQueue Route")
-//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/cohortCodes")
-//		.end();
-		
 		//Program
 		from("jms:queue:programCodeQueue2")
 		.routeId("programCodeQueue2")
@@ -169,6 +160,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
 		.end();
 		
+		//Guardian Payload From Academic
 		from("jms:queue:GuardianPayloadQueue")
 		.routeId("GuardianPayloadQueue")
 		.log("incoming GuardianPayloadQueue")
@@ -178,39 +170,15 @@ public class ConnectorRoute extends RouteBuilder {
 		.log("Finish GuardianPayloadQueue Routes")
 		.end();
 		
-
-		// from("jms:queue:facultyCodeQueue")
-		// .routeId("facultyCodeQueue")
-		// .log("incoming faculty code")
-		// .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		// .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		// .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
-		// .end();
-		// from("direct:start").to("activemq:topic:VirtualTopic.foo");
-		//  
-		// from("activemq:queue:Consumer.1.VirtualTopic.foo").to("mock:result1");
-		//  
-		// from("activemq:queue:Consumer.2.VirtualTopic.foo").to("mock:result2");
-
-		// from("jms:topic:facultyCodeTopic")
-		// .routeId("facultyCodeTopic")
-		// .log("incoming faculty code")
-		// .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		// .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		// .to("activemq:topic:facultyCodeTopic")
-		// .end();
-
-		// from("jms:queue:acfacultyCodeQueue").routeId("acFacultyCodeQueue").log("incoming
-		// faculty code")
-		// .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		// .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		// .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes").end();
-		//
-		// from("jms:queue:inFacultyCodeQueue").routeId("inFacultyCodeQueue").log("incoming
-		// faculty code")
-		// .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		// .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		// .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
+		from("jms:queue:MinAmountPayloadQueue")
+		.routeId("MinAmountPayloadQueue")
+		.log("incoming MinAmountPayloadQueue")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/minAmounts")
+		.log("Finish MinAmountPayloadQueue Routes")
+		.end();
+		
 		
 
 
