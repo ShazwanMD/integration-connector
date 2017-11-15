@@ -9,7 +9,8 @@ import java.io.IOException;
  */
 public class ProgramCodePayload {
     private String code;
-    private String description;
+    private String descriptionMs;
+    private String descriptionEn;
     private FacultyCodePayload facultyCode;
     private ProgramLevelPayload programLevel;
 
@@ -21,15 +22,23 @@ public class ProgramCodePayload {
         this.code = code;
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescriptionMs() {
+		return descriptionMs;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setDescriptionMs(String descriptionMs) {
+		this.descriptionMs = descriptionMs;
+	}
 
-    public FacultyCodePayload getFacultyCode() {
+	public String getDescriptionEn() {
+		return descriptionEn;
+	}
+
+	public void setDescriptionEn(String descriptionEn) {
+		this.descriptionEn = descriptionEn;
+	}
+
+	public FacultyCodePayload getFacultyCode() {
         return facultyCode;
     }
 
