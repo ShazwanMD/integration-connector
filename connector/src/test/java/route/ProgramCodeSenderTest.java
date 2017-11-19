@@ -50,7 +50,7 @@ public class ProgramCodeSenderTest extends AbstractJUnit4SpringContextTests {
 
         ProgramCodePayload program = new ProgramCodePayload();
         program.setCode("XYZ-" + UUID.randomUUID().toString().substring(3));
-        program.setDescription("New Program");
+        program.setDescriptionEn("New Program");
         program.setFacultyCode(faculty);
 
         programCodeSender.send("programCodeQueue", program);

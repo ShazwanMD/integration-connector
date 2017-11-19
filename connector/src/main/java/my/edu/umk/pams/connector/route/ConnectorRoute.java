@@ -60,8 +60,13 @@ public class ConnectorRoute extends RouteBuilder {
 //        .setProperty("staffName",body())
 //        .multicast().stopOnException()
 //        .to("direct:academicTestImsStaff").end();
-         
-         from("jms:queue:academicTestStaffQueue2")
+ 
+        
+//===============================================================================================================================
+//		IMS Staff Payload Topic
+//===============================================================================================================================        
+
+        from("jms:queue:academicTestStaffQueue2")
  		.log("incoming staff ims")
  		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
  		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -74,109 +79,147 @@ public class ConnectorRoute extends RouteBuilder {
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
 		.end();
-		
-		
-		
-		
-		//Sending Multicast Candidate From Intake To Academic and Account
-		from("jms:queue:candidateQueue3")
-		.routeId("candidateQueueRoute3")
-		.log("incoming candidate")
+
+//===============================================================================================================================
+//		Candidate Payload Topic
+//===============================================================================================================================
+		//Candidate
+		from("jms:topic:candidateTopic5")
+		.routeId("candidateTopic5")
+		.log("incoming candidate topic 5")
+		.multicast()
+		.to("direct:academicCandidate","direct:accountCandidate")
+		.end();
+
+		from("direct:academicCandidate")
+		.log("Start Send Academic Candidate topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("direct:academic","direct:account")
+		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates")
+		.log("Finish Send Academic Candidate topic 5")
 		.end();
 		
-		from("direct:academic")
-		.log("Academic Candidate Route")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates").end();
-
-		from("direct:account")
-		.log("Account Candidate Route")
+		from("direct:accountCandidate")
+		.log("Start Send Account Candidate topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/candidates")
-		.end();
+		.log("Finish Send Account Candidate topic 5")
+		.end();		
+		
+//===============================================================================================================================
+//		Admission Payload Queue
+//===============================================================================================================================		
 		
 		//Admission Payload From Academic
-		from("jms:queue:AdmissionPayloadQueue1")
-		.routeId("AdmissionPayloadQueue1")
-		.log("Incoming AdmissionPayloadQueue1")
+		from("jms:queue:AdmissionPayloadQueue5")
+		.routeId("AdmissionPayloadQueue5")
+		.log("Incoming AdmissionPayloadQueue Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/admissions")
+		.log("Finish Incoming AdmissionPayloadQueue Queue 5")
 		.end();
 
+		
+//===============================================================================================================================
+//		Account Payload Queue
+//===============================================================================================================================
 		//Sending Student Account From Account
-		from("jms:queue:accountQueue1")
-		.routeId("accountQueue1")
-		.log("incoming Account Student")
+		from("jms:queue:accountQueue5")
+		.routeId("accountQueue5")
+		.log("Start incoming Student's Account Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/studentAccounts")
+		.log("Finish Receive Student's Account Queue 5")
 		.end();
+
+//===============================================================================================================================
+//		Faculty Payload Topic
+//===============================================================================================================================
 		
 		//Testing Sending One To Many
-		from("jms:queue:facultyCodeQueue2")
-		.routeId("facultyCodeQueue2")
-		.log("Incoming Faculty Code")
+		from("jms:topic:facultyCodeTopic5")
+		.routeId("facultyCodeTopic5")
+		.log("Incoming Faculty Code topic 5")
 		.multicast()
-		.to("direct:intake","direct:accountFaculty")
+		.to("direct:intakeFaculty","direct:accountFaculty")
 		.end();
 
-		from("direct:intake")
-		.log("intake faculty code")
+		from("direct:intakeFaculty")
+		.log("Start Receive intake faculty code topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
+		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes")
+		.log("Finish Receive intake faculty code topic 5")
+		.end();
 
 		from("direct:accountFaculty")
-		.log("account faculty code")
+		.log("Start Receive account faculty code topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
+		.log("Finish Receive intake faculty code topic 5")
 		.end();
-		
+
+
+//===============================================================================================================================
+//		Faculty Payload Topic
+//===============================================================================================================================		
+
 		//Program
-		from("jms:queue:programCodeQueue2")
-		.routeId("programCodeQueue2")
-		.log("incoming program code2")
+		from("jms:topic:programCodeTopic5")
+		.routeId("programCodeTopic5")
+		.log("incoming program code topic 5")
 		.multicast()
 		.to("direct:intakeProgram","direct:accountProgram")
 		.end();
 
 		from("direct:intakeProgram")
-		.log("intake faculty code")
+		.log("Start Receive intake program code topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes").end();
-
+		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes")
+		.log("Finish Receive intake program code topic 5")
+		.end();
+		
 		from("direct:accountProgram")
-		.log("account faculty code")
+		.log("Start Receive account program code topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
+		.log("Finish Receive account program code topic 5")
 		.end();
+	
+
+//===============================================================================================================================
+//		Guardian Payload Queue
+//===============================================================================================================================
 		
 		//Guardian Payload From Academic
-		from("jms:queue:GuardianPayloadQueue")
-		.routeId("GuardianPayloadQueue")
-		.log("incoming GuardianPayloadQueue")
+		from("jms:queue:GuardianPayloadQueue5")
+		.routeId("GuardianPayloadQueue5")
+		.log("Start incoming Guardian Payload Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/guardians")
-		.log("Finish GuardianPayloadQueue Routes")
+		.log("Finish Receive Guardian Payload Queue 5")
 		.end();
+
+
+//===============================================================================================================================
+//		Min Amount Payments Payload Queue
+//===============================================================================================================================
 		
-		from("jms:queue:MinAmountPayloadQueue")
-		.routeId("MinAmountPayloadQueue")
-		.log("incoming MinAmountPayloadQueue")
+		
+		from("jms:queue:MinAmountPayloadQueue5")
+		.routeId("MinAmountPayloadQueue5")
+		.log("Start incoming Min Amount Payload Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/minAmounts")
-		.log("Finish MinAmountPayloadQueue Routes")
+		.log("Finish incoming Min Amount Payload Queue 5")
 		.end();
 		
 		
