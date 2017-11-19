@@ -10,6 +10,9 @@ import java.math.BigDecimal;
  */
 public class CandidatePayload {
     private String name;
+    private String gender;
+    private String martialStatus;
+    private String religion;
     private String matricNo;
     private String email;
     private String phone;
@@ -17,6 +20,7 @@ public class CandidatePayload {
     private String fax;
     private String programCodeDescriptionMs;
     private String facultyCodeDescriptionMs;
+    private String programLevel;
 
     // todo: use the object version
     private String cohortCode;
@@ -37,8 +41,39 @@ public class CandidatePayload {
     private AddressPayload secondaryAddress;
     
     private String supervisorCode;
- 
        
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getMartialStatus() {
+		return martialStatus;
+	}
+
+	public void setMartialStatus(String martialStatus) {
+		this.martialStatus = martialStatus;
+	}
+
+	public String getReligion() {
+		return religion;
+	}
+
+	public void setReligion(String religion) {
+		this.religion = religion;
+	}
+
+	public String getProgramLevel() {
+		return programLevel;
+	}
+
+	public void setProgramLevel(String programLevel) {
+		this.programLevel = programLevel;
+	}
+
 	public String getFacultyCodeDescriptionMs() {
 		return facultyCodeDescriptionMs;
 	}

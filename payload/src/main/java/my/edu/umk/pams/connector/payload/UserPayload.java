@@ -12,7 +12,16 @@ public class UserPayload {
 	private String email;
 	private String password;
 	
+    private String nric;
 	
+	
+    
+	public String getNric() {
+		return nric;
+	}
+	public void setNric(String nric) {
+		this.nric = nric;
+	}
 	public String getUsername() {
 		return username;
 	}
