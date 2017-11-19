@@ -15,6 +15,8 @@ public class CandidatePayload {
     private String phone;
     private String mobile;
     private String fax;
+    private String programCodeDescriptionMs;
+    private String facultyCodeDescriptionMs;
 
     // todo: use the object version
     private String cohortCode;
@@ -36,7 +38,24 @@ public class CandidatePayload {
     
     private String supervisorCode;
  
-    public String getName() {
+       
+	public String getFacultyCodeDescriptionMs() {
+		return facultyCodeDescriptionMs;
+	}
+
+	public void setFacultyCodeDescriptionMs(String facultyCodeDescriptionMs) {
+		this.facultyCodeDescriptionMs = facultyCodeDescriptionMs;
+	}
+
+	public String getProgramCodeDescriptionMs() {
+		return programCodeDescriptionMs;
+	}
+
+	public void setProgramCodeDescriptionMs(String programCodeDescriptionMs) {
+		this.programCodeDescriptionMs = programCodeDescriptionMs;
+	}
+
+	public String getName() {
         return name;
     }
 
