@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import my.edu.umk.pams.connector.payload.CandidatePayload;
+import my.edu.umk.pams.connector.payload.StaffPayload;
 
 /**
  */
