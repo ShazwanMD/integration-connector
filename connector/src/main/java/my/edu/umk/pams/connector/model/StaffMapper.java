@@ -42,6 +42,7 @@ public class StaffMapper {
             model.setStaffDepartmentCode(staffDeptCode);
             model.setStaffPhoneNo(staffTelNo);
             model.setStaffEmail(staffEmail);
+            model.setStaffGred(staffGred);
             
             list.add(model);
         }
