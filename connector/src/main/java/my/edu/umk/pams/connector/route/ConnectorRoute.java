@@ -133,7 +133,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.routeId("candidateQueue5")
 		.log("incoming candidate Queue 5")
 		.multicast()
-		.to("direct:academicCandidate","direct:accountCandidate","direct:radiusUser","direct:radiusRadCheck")
+		.to("direct:academicCandidate","direct:accountCandidate"/*,"direct:radiusUser","direct:radiusRadCheck"*/)
 		.end();
 
 		from("direct:academicCandidate")

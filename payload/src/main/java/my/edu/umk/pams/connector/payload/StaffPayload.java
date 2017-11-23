@@ -10,7 +10,8 @@ public class StaffPayload {
 	String staffName;
 	String staffEmail;
 	String staffPhoneNo;
-	
+	String staffDepartmentCode;
+    String staffCategory;
 	
 	public String getStaffId() {
 		return staffId;
@@ -35,6 +36,18 @@ public class StaffPayload {
 	}
 	public void setStaffPhoneNo(String staffPhoneNo) {
 		this.staffPhoneNo = staffPhoneNo;
+	}
+	public String getStaffDepartmentCode() {
+		return staffDepartmentCode;
+	}
+	public void setStaffDepartmentCode(String staffDepartmentCode) {
+		this.staffDepartmentCode = staffDepartmentCode;
+	}
+	public String getStaffCategory() {
+		return staffCategory;
+	}
+	public void setStaffCategory(String staffCategory) {
+		this.staffCategory = staffCategory;
 	}
 	@JsonCreator
     public static StaffPayload create(String jsonString) {
