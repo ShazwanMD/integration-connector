@@ -32,7 +32,7 @@ public class StaffMapper {
             System.out.println("staffId {}"+staffId);
             System.out.println("staffName {}"+staffName);
             StaffPayload model = new StaffPayload();
-            model.setName(staffName);
+            model.setStaffName(staffName);
             model.setStaffId(staffId);
             list.add(model);
         }
