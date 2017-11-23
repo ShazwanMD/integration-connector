@@ -28,12 +28,21 @@ public class StaffMapper {
 
         for (Map<String, Object> map : result) {
             String staffId = ((String) map.get("SM_STAFF_ID"));
-            String staffName = ((String) map.get("SM_STAFF_NAME"));
-            System.out.println("staffId {}"+staffId);
-            System.out.println("staffName {}"+staffName);
+            String staffName = ((String) map.get("NAMA"));
+            String staffEmail = ((String) map.get("SM_EMAIL_ADDR"));
+            String staffDeptCode = ((String) map.get("SM_DEPT_CODE"));
+            String staffTelNo = ((String) map.get("SM_TELNO_WORK"));
+            String staffGred= ((String) map.get("SS_SALARY_GRADE"));
+            String staffCategory = ((String) map.get("SOG_GROUP_CODE"));
+            
             StaffPayload model = new StaffPayload();
             model.setStaffName(staffName);
             model.setStaffId(staffId);
+            model.setStaffCategory(staffCategory);
+            model.setStaffDepartmentCode(staffDeptCode);
+            model.setStaffPhoneNo(staffTelNo);
+            model.setStaffEmail(staffEmail);
+            
             list.add(model);
         }
         return list;
