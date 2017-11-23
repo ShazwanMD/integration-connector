@@ -19,6 +19,7 @@ import javax.sql.DataSource;
 import my.edu.umk.pams.connector.Application;
 import my.edu.umk.pams.connector.model.CandidateMapper;
 import my.edu.umk.pams.connector.payload.CandidatePayload;
+import my.edu.umk.pams.connector.payload.StaffPayload;
 import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
 import my.edu.umk.pams.connector.processor.StaffSyncProcessor;
 
@@ -50,20 +51,50 @@ public class ConnectorRoute extends RouteBuilder {
 		
 		SqlComponent imsSqlComponent = new SqlComponent();
         imsSqlComponent.setDataSource(imsDataSource);
-        getContext().addComponent("sqlIms", imsSqlComponent);
+        getContext().addComponent("sql", imsSqlComponent);
         
-//        
-//        from("quartz://syncTimer?cron={{sampleCronExpression}}")
-//        .to("sqlIms:SELECT SM_STAFF_ID,SM_STAFF_NAME from STAFF_ALL WHERE SM_STAFF_NAME LIKE '%HANIF%'?useIterator=true")
-//        .bean("staffMapper", "process")
-//        .setProperty("staffId",body())
-//        .setProperty("staffName",body())
-//        .multicast().stopOnException()
-//        .to("direct:academicTestImsStaff").end();
+//===============================================================================================================================
+//		Ims Staf Integration
+//===============================================================================================================================
+        //Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas)
+        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas)")
+        .to("sql:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL WHERE SM_STATUS = '01'?useIterator=true")
+        .log("sending from direct channel")
+        .bean("staffMapper", "process")
+        .to("direct:academicImsStaff","direct:intakeImsStaff")
+        .end();
+        
+        from("direct:academicImsStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel")
+        .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();
+        
+        //Staf bukan akademik ptj CPS (Group penolong pegawai 29 dan ke bawah)
+        
+        //Staf bukan akademik ptj MGSEB (Group pegawai 41 dan ke atas)
+        
+        
+        //Staf bukan akademik ptj MGSEB (Group penolong pegawai 29 dan ke bawah)
+        
+        //Staf bukan akademik ptj Bendahari (Group pegawai 41 dan ke atas)
+        
+        //Staf bukan akademik ptj Bendahari (Group penolong pegawai 29 dan ke bawah)
+        
+        
+        //Staf bukan akademik ptj Security (Group pegawai 41 dan ke atas)
+        
+        //Staf bukan akademik ptj Security (Group penolong pegawai 29 dan ke bawah)
+        
+        //Staf bukan akademik ptj HEPA (Group pegawai 41 dan ke atas)
+        
+        //Staf bukan akademik ptj HEPA (Group penolong pegawai 29 dan ke bawah)
  
 //===============================================================================================================================
 //		Candidate Payload Topic
-//===============================================================================================================================
+//===============================================================================================================================    
+        
 		//Candidate
 		from("jms:queue:candidateQueue5")
 		.routeId("candidateQueue5")
@@ -88,7 +119,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.log("Finish Send Account Candidate Queue 5")
 		.end();		
 		
-		from("direct:radiusUser")
+		/*from("direct:radiusUser")
 		.log("Start Send Radius User topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -102,7 +133,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.smart-api.host}}:{{rest.smart-api.port}}/api/smart/student/radiusManager/radCheck")
 		.log("Finish Send Radius radCheck topic 5")
-		.end();	
+		.end();	*/
 		
 //===============================================================================================================================
 //		Admission Payload Queue
