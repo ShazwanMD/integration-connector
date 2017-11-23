@@ -8,6 +8,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class StaffPayload {
 	String staffId;
 	String staffName;
+	String staffEmail;
+	String staffPhoneNo;
+	
 	
 	public String getStaffId() {
 		return staffId;
@@ -20,8 +23,19 @@ public class StaffPayload {
 	}
 	public void setStaffName(String staffName) {
 		this.staffName = staffName;
+	}	
+	public String getStaffEmail() {
+		return staffEmail;
 	}
-	
+	public void setStaffEmail(String staffEmail) {
+		this.staffEmail = staffEmail;
+	}
+	public String getStaffPhoneNo() {
+		return staffPhoneNo;
+	}
+	public void setStaffPhoneNo(String staffPhoneNo) {
+		this.staffPhoneNo = staffPhoneNo;
+	}
 	@JsonCreator
     public static StaffPayload create(String jsonString) {
 		StaffPayload o = null;
