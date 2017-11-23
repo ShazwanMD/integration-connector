@@ -61,25 +61,6 @@ public class ConnectorRoute extends RouteBuilder {
 //        .multicast().stopOnException()
 //        .to("direct:academicTestImsStaff").end();
  
-        
-//===============================================================================================================================
-//		IMS Staff Payload Topic
-//===============================================================================================================================        
-
-        from("jms:queue:academicTestStaffQueue2")
- 		.log("incoming staff ims")
- 		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
- 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
- 		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();
-
-		from("jms:queue:imsStaffQueue")
-		.routeId("imsStaffQueue")
-		.log("IMS Staff Queue")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff")
-		.end();
-
 //===============================================================================================================================
 //		Candidate Payload Topic
 //===============================================================================================================================
@@ -106,6 +87,22 @@ public class ConnectorRoute extends RouteBuilder {
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/candidates")
 		.log("Finish Send Account Candidate topic 5")
 		.end();		
+		
+		from("direct:radiusUser")
+		.log("Start Send Radius User topic 5")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.smart-api.host}}:{{rest.smart-api.port}}/api/smart/student/radiusManager/rmUser")
+		.log("Finish Send Radius User topic 5")
+		.end();
+		
+		from("direct:radiusRadCheck")
+		.log("Start Send Radius User topic 5")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.smart-api.host}}:{{rest.smart-api.port}}/api/smart/student/radiusManager/radCheck")
+		.log("Finish Send Radius radCheck topic 5")
+		.end();	
 		
 //===============================================================================================================================
 //		Admission Payload Queue
