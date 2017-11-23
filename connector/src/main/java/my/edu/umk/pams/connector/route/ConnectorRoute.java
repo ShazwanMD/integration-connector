@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
+
 import javax.annotation.PostConstruct;
 import javax.jms.ConnectionFactory;
 import javax.sql.DataSource;
@@ -56,9 +58,39 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================
 //		Ims Staf Integration
 //===============================================================================================================================
-        //Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas)
+       // String today = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
+        
+        //Staf bukan akademik ptj dan fakulti (Group pegawai 41 dan ke atas) ACTIVE
+        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
+        		+ "FROM CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE (SM_DEPT_CODE IN ('A06','A09','A11','A01','A02','A04',"
+        		+ "'A05','A07','A08','A10','B010205','A12','A13','B03','B08') "
+        		+ "OR SM_UNIT IN ('B0204')) AND SOG_GROUP_CODE NOT IN ('PENK','JUSA','PROF','PEN','PM') "
+        		+ "AND (SS_SALARY_GRADE LIKE 'N%' OR SS_SALARY_GRADE LIKE 'W%' OR SS_SALARY_GRADE LIKE 'KP%') "
+        		+ "ORDER BY SM_DEPT_CODE,SOG_GROUP_CODE,SS_SALARY_GRADE DESC?useIterator=true")
+        .log("sending from direct channel")
+        .bean("staffMapper", "process")
+        .multicast()
+        .to("direct:akademikImsBknAkdmkStaff","direct:intakeImsBknAkdmkStaff")
+        .end();
+        
+        from("direct:akademikImsBknAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:akademikImsBknAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff/nonAcademicActive").end();
+        
+        from("direct:intakeImsBknAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:intakeImsBknAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicActive").end();
+        
+      /*//Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas) INACTIVE
         from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas)")
-        .to("sql:SELECT SM_STAFF_ID, SM_STAFF_NAME from STAFF_ALL WHERE SM_STATUS = '01'?useIterator=true")
+        .to("sql:SELECT SM_STAFF_ID, SM_STAFF_NAME,SM_TELNO_WORK,SS_SALARY_GRADE from CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE ?useIterator=true")
         .log("sending from direct channel")
         .bean("staffMapper", "process")
         .to("direct:academicImsStaff","direct:intakeImsStaff")
@@ -69,7 +101,8 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();*/
+        
         
         //Staf bukan akademik ptj CPS (Group penolong pegawai 29 dan ke bawah)
         
