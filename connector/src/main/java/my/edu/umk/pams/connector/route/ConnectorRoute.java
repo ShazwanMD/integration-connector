@@ -65,27 +65,27 @@ public class ConnectorRoute extends RouteBuilder {
 //		Candidate Payload Topic
 //===============================================================================================================================
 		//Candidate
-		from("jms:topic:candidateTopic5")
-		.routeId("candidateTopic5")
-		.log("incoming candidate topic 5")
+		from("jms:queue:candidateQueue5")
+		.routeId("candidateQueue5")
+		.log("incoming candidate Queue 5")
 		.multicast()
 		.to("direct:academicCandidate","direct:accountCandidate","direct:radiusUser","direct:radiusRadCheck")
 		.end();
 
 		from("direct:academicCandidate")
-		.log("Start Send Academic Candidate topic 5")
+		.log("Start Send Academic Candidate Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/candidates")
-		.log("Finish Send Academic Candidate topic 5")
+		.log("Finish Send Academic Candidate Queue 5")
 		.end();
 		
 		from("direct:accountCandidate")
-		.log("Start Send Account Candidate topic 5")
+		.log("Start Send Account Candidate Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/candidates")
-		.log("Finish Send Account Candidate topic 5")
+		.log("Finish Send Account Candidate Queue 5")
 		.end();		
 		
 		from("direct:radiusUser")
@@ -137,27 +137,27 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================
 		
 		//Testing Sending One To Many
-		from("jms:topic:facultyCodeTopic5")
-		.routeId("facultyCodeTopic5")
-		.log("Incoming Faculty Code topic 5")
+		from("jms:queue:facultyCodeQueue5")
+		.routeId("facultyCodeQueue5")
+		.log("Incoming Faculty Code Queue 5")
 		.multicast()
 		.to("direct:intakeFaculty","direct:accountFaculty")
 		.end();
 
 		from("direct:intakeFaculty")
-		.log("Start Receive intake faculty code topic 5")
+		.log("Start Receive intake faculty code Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes")
-		.log("Finish Receive intake faculty code topic 5")
+		.log("Finish Receive intake faculty code Queue 5")
 		.end();
 
 		from("direct:accountFaculty")
-		.log("Start Receive account faculty code topic 5")
+		.log("Start Receive account faculty code Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes")
-		.log("Finish Receive intake faculty code topic 5")
+		.log("Finish Receive intake faculty code Queue 5")
 		.end();
 
 
@@ -166,27 +166,27 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================		
 
 		//Program
-		from("jms:topic:programCodeTopic5")
-		.routeId("programCodeTopic5")
-		.log("incoming program code topic 5")
+		from("jms:queue:programCodeQueue5")
+		.routeId("programCodeQueue5")
+		.log("incoming program code Queue 5")
 		.multicast()
 		.to("direct:intakeProgram","direct:accountProgram")
 		.end();
 
 		from("direct:intakeProgram")
-		.log("Start Receive intake program code topic 5")
+		.log("Start Receive intake program code Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/programCodes")
-		.log("Finish Receive intake program code topic 5")
+		.log("Finish Receive intake program code Queue 5")
 		.end();
 		
 		from("direct:accountProgram")
-		.log("Start Receive account program code topic 5")
+		.log("Start Receive account program code Queue 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/programCodes")
-		.log("Finish Receive account program code topic 5")
+		.log("Finish Receive account program code Queue 5")
 		.end();
 	
 
