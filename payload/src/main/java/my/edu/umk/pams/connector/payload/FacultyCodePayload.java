@@ -10,6 +10,7 @@ import java.io.IOException;
 public class FacultyCodePayload {
     private String code;
     private String description;
+    private String prefix;
 
     public String getCode() {
         return code;
@@ -27,7 +28,15 @@ public class FacultyCodePayload {
         this.description = description;
     }
 
-    @JsonCreator
+    public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+
+	@JsonCreator
     public static FacultyCodePayload create(String jsonString) {
         FacultyCodePayload o = null;
         try {

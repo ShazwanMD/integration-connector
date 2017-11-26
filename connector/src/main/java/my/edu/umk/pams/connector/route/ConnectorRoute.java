@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 import my.edu.umk.pams.connector.Application;
 import my.edu.umk.pams.connector.model.CandidateMapper;
 import my.edu.umk.pams.connector.payload.CandidatePayload;
+import my.edu.umk.pams.connector.payload.FacultyCodePayload;
 import my.edu.umk.pams.connector.payload.StaffPayload;
 import my.edu.umk.pams.connector.processor.CandidateQueueSyncProcessor;
 import my.edu.umk.pams.connector.processor.StaffSyncProcessor;
@@ -143,7 +144,7 @@ public class ConnectorRoute extends RouteBuilder {
         .log("${body}")
         .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicActive").end();
         
-      //Staff Akademik InActive
+        //Staff Akademik InActive
         from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE "
@@ -163,11 +164,36 @@ public class ConnectorRoute extends RouteBuilder {
         .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff/academicInActive").end();
         
         from("direct:intakeImsInActiveAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
-        .log("incoming from direct channel direct:intakeImsAkdmkStaff")
+        .log("incoming from direct channel direct:intakeImsInActiveAkdmkStaff")
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicInActive").end();
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeInActive").end();
+        
+        //Department
+        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        .to("sql:SELECT DM_DEPT_CODE,DM_DEPT_DESC,DM_ID_PREFIX "
+        		+ "FROM CMSADMIN.V_PAMS_DEPT?useIterator=true")
+        .log("sending from direct channel")
+        .bean("departmentMapper", "process")
+        .multicast()
+        .to("direct:akademikFacultyCode","direct:intakeFacultyCode")
+        .end();
+        
+        from("direct:akademikFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
+        .log("incoming from direct channel direct:akademikFacultyCode")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff/academicFacultyCode").end();
+        
+        from("direct:intakeFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
+        .log("incoming from direct channel direct:intakeFacultyCode")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeFacultyCode").end();
+        
  
 //===============================================================================================================================
 //		Candidate Payload Topic
