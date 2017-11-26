@@ -60,7 +60,7 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================
        // String today = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
         
-        //Staf bukan akademik ptj dan fakulti (Group pegawai 41 dan ke atas) ACTIVE
+        //Staf bukan akademik ptj dan fakulti ACTIVE
         from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE (SM_DEPT_CODE IN ('A06','A09','A11','A01','A02','A04',"
@@ -88,41 +88,86 @@ public class ConnectorRoute extends RouteBuilder {
         .log("${body}")
         .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicActive").end();
         
-      /*//Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas) INACTIVE
-        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik ptj CPS (Group pegawai 41 dan ke atas)")
-        .to("sql:SELECT SM_STAFF_ID, SM_STAFF_NAME,SM_TELNO_WORK,SS_SALARY_GRADE from CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE ?useIterator=true")
+        //Staf bukan akademik ptj dan fakulti INACTIVE
+        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
+        		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE (SM_DEPT_CODE IN ('A06','A09','A11','A01','A02','A04',"
+        		+ "'A05','A07','A08','A10','B010205','A12','A13','B03','B08') "
+        		+ "OR SM_UNIT IN ('B0204')) AND SOG_GROUP_CODE NOT IN ('PENK','JUSA','PROF','PEN','PM') "
+        		+ "AND (SS_SALARY_GRADE LIKE 'N%' OR SS_SALARY_GRADE LIKE 'W%' OR SS_SALARY_GRADE LIKE 'KP%') "
+        		+ "ORDER BY SM_DEPT_CODE,SOG_GROUP_CODE,SS_SALARY_GRADE DESC?useIterator=true")
         .log("sending from direct channel")
         .bean("staffMapper", "process")
-        .to("direct:academicImsStaff","direct:intakeImsStaff")
+        .multicast()
+        .to("direct:akademikImsInActiveBknAkdmkStaff","direct:intakeImsInActiveBknAkdmkStaff")
         .end();
         
-        from("direct:academicImsStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
-        .log("incoming from direct channel")
-        .setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+        from("direct:akademikImsInActiveBknAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:akademikImsBknAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff").end();*/
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff/nonAcademicInActive").end();
+        
+        from("direct:intakeImsInActiveBknAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:intakeImsBknAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicInActive").end();
         
         
-        //Staf bukan akademik ptj CPS (Group penolong pegawai 29 dan ke bawah)
+        //Staff Akademik Active
+        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
+        		+ "FROM CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE "
+        		+ "SOG_GROUP_CODE IN ('PENK','JUSA','PROF','PEN','PM') "
+        		+ "ORDER BY SM_DEPT_CODE,SOG_GROUP_CODE,SS_SALARY_GRADE DESC?useIterator=true")
+        .log("sending from direct channel")
+        .bean("staffMapper", "process")
+        .multicast()
+        .to("direct:akademikImsAkdmkStaff","direct:intakeImsAkdmkStaff")
+        .end();
         
-        //Staf bukan akademik ptj MGSEB (Group pegawai 41 dan ke atas)
+        from("direct:akademikImsAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:akademikImsAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff/academicActive").end();
         
+        from("direct:intakeImsAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:intakeImsAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicActive").end();
         
-        //Staf bukan akademik ptj MGSEB (Group penolong pegawai 29 dan ke bawah)
+      //Staff Akademik InActive
+        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
+        		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE "
+        		+ "SOG_GROUP_CODE IN ('PENK','JUSA','PROF','PEN','PM') "
+        		+ "ORDER BY SM_DEPT_CODE,SOG_GROUP_CODE,SS_SALARY_GRADE DESC?useIterator=true")
+        .log("sending from direct channel")
+        .bean("staffMapper", "process")
+        .multicast()
+        .to("direct:akademikImsInActiveAkdmkStaff","direct:intakeImsInActiveAkdmkStaff")
+        .end();
         
-        //Staf bukan akademik ptj Bendahari (Group pegawai 41 dan ke atas)
+        from("direct:akademikImsInActiveAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:akademikImsInActiveAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/staff/academicInActive").end();
         
-        //Staf bukan akademik ptj Bendahari (Group penolong pegawai 29 dan ke bawah)
-        
-        
-        //Staf bukan akademik ptj Security (Group pegawai 41 dan ke atas)
-        
-        //Staf bukan akademik ptj Security (Group penolong pegawai 29 dan ke bawah)
-        
-        //Staf bukan akademik ptj HEPA (Group pegawai 41 dan ke atas)
-        
-        //Staf bukan akademik ptj HEPA (Group penolong pegawai 29 dan ke bawah)
+        from("direct:intakeImsInActiveAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
+        .log("incoming from direct channel direct:intakeImsAkdmkStaff")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicInActive").end();
  
 //===============================================================================================================================
 //		Candidate Payload Topic
