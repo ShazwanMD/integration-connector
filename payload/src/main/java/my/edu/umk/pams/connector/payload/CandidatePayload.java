@@ -13,6 +13,7 @@ public class CandidatePayload {
     private String gender;
     private String martialStatus;
     private String religion;
+    private String race;
     private String matricNo;
     private String email;
     private String phone;
@@ -21,11 +22,13 @@ public class CandidatePayload {
     private String programCodeDescriptionMs;
     private String facultyCodeDescriptionMs;
     private String programLevel;
+    private String ResearchTitle;
 
     // todo: use the object version
     private String cohortCode;
     private String programCode;
     private String facultyCode;
+    
 
     
     private BigDecimal balance;
@@ -232,6 +235,22 @@ public class CandidatePayload {
 
 	public void setUserPayload(UserPayload userPayload) {
 		this.userPayload = userPayload;
+	}
+	
+	public String getResearchTitle() {
+		return ResearchTitle;
+	}
+
+	public void setResearchTitle(String researchTitle) {
+		ResearchTitle = researchTitle;
+	}
+
+	public String getRace() {
+		return race;
+	}
+
+	public void setRace(String race) {
+		this.race = race;
 	}
 
 	@JsonCreator
