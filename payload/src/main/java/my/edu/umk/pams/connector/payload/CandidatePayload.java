@@ -19,8 +19,6 @@ public class CandidatePayload {
     private String phone;
     private String mobile;
     private String fax;
-    private String programCodeDescriptionMs;
-    private String facultyCodeDescriptionMs;
     private String programLevel;
     private String ResearchTitle;
 
@@ -28,9 +26,7 @@ public class CandidatePayload {
     private String cohortCode;
     private String programCode;
     private String facultyCode;
-    
-
-    
+        
     private BigDecimal balance;
     private boolean outstanding;
     
@@ -75,22 +71,6 @@ public class CandidatePayload {
 
 	public void setProgramLevel(String programLevel) {
 		this.programLevel = programLevel;
-	}
-
-	public String getFacultyCodeDescriptionMs() {
-		return facultyCodeDescriptionMs;
-	}
-
-	public void setFacultyCodeDescriptionMs(String facultyCodeDescriptionMs) {
-		this.facultyCodeDescriptionMs = facultyCodeDescriptionMs;
-	}
-
-	public String getProgramCodeDescriptionMs() {
-		return programCodeDescriptionMs;
-	}
-
-	public void setProgramCodeDescriptionMs(String programCodeDescriptionMs) {
-		this.programCodeDescriptionMs = programCodeDescriptionMs;
 	}
 
 	public String getName() {
