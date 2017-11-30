@@ -21,6 +21,7 @@ public class CandidatePayload {
     private String programCodeDescriptionMs;
     private String facultyCodeDescriptionMs;
     private String programLevel;
+    private String icNo;
 
     // todo: use the object version
     private String cohortCode;
@@ -72,6 +73,14 @@ public class CandidatePayload {
 
 	public void setProgramLevel(String programLevel) {
 		this.programLevel = programLevel;
+	}
+	
+	public String getIcNo() {
+		return icNo;
+	}
+
+	public void setIcNo(String icNo) {
+		this.icNo = icNo;
 	}
 
 	public String getFacultyCodeDescriptionMs() {
