@@ -10,6 +10,8 @@ public class AccountPayload {
     private String matricNo;
     private BigDecimal balance;
     private boolean outstanding;
+    private StudentStatus studentStatus;
+    
 
     public String getCode() {
         return code;
@@ -42,4 +44,14 @@ public class AccountPayload {
     public void setOutstanding(boolean outstanding) {
         this.outstanding = outstanding;
     }
+
+	public StudentStatus getStudentStatus() {
+		return studentStatus;
+	}
+
+	public void setStudentStatus(StudentStatus studentStatus) {
+		this.studentStatus = studentStatus;
+	}
+    
+    
 }
