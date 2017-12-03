@@ -171,7 +171,7 @@ public class ConnectorRoute extends RouteBuilder {
         .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeInActive").end();
         
         //Department
-        from("quartz://syncTimer?cron={{staffDepartSyncCron}}").log("sending Staf bukan akademik)")
+        from("quartz://syncTimer?cron={{staffDepartSyncCron}}").log("sending Staf Department)")
         .to("sql:SELECT DM_DEPT_CODE,DM_DEPT_DESC,DM_ID_PREFIX "
         		+ "FROM CMSADMIN.V_PAMS_DEPT?useIterator=true")
         .log("sending from direct channel")
