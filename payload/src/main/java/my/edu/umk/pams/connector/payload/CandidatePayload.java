@@ -23,8 +23,8 @@ public class CandidatePayload {
 
     // todo: use the object version
     private String cohortCode;
-    private String programCode;
-    private String facultyCode;
+    private ProgramCodePayload programCode;
+    private FacultyCodePayload facultyCode;
 
     
     private BigDecimal balance;
@@ -40,6 +40,8 @@ public class CandidatePayload {
     private AddressPayload secondaryAddress;
     
     private String supervisorCode;
+    
+    private String researchTitle;
        
 	public String getGender() {
 		return gender;
@@ -71,22 +73,6 @@ public class CandidatePayload {
 
 	public void setProgramLevel(String programLevel) {
 		this.programLevel = programLevel;
-	}
-
-	public String getFacultyCodeDescriptionMs() {
-		return facultyCodeDescriptionMs;
-	}
-
-	public void setFacultyCodeDescriptionMs(String facultyCodeDescriptionMs) {
-		this.facultyCodeDescriptionMs = facultyCodeDescriptionMs;
-	}
-
-	public String getProgramCodeDescriptionMs() {
-		return programCodeDescriptionMs;
-	}
-
-	public void setProgramCodeDescriptionMs(String programCodeDescriptionMs) {
-		this.programCodeDescriptionMs = programCodeDescriptionMs;
 	}
 
 	public String getName() {
@@ -145,23 +131,31 @@ public class CandidatePayload {
         this.cohortCode = cohortCode;
     }
 
-    public String getProgramCode() {
-        return programCode;
-    }
+	public ProgramCodePayload getProgramCode() {
+		return programCode;
+	}
 
-    public void setProgramCode(String programCode) {
-        this.programCode = programCode;
-    }
+	public void setProgramCode(ProgramCodePayload programCode) {
+		this.programCode = programCode;
+	}
 
-    public String getFacultyCode() {
-        return facultyCode;
-    }
+	public String getRace() {
+		return race;
+	}
 
-    public void setFacultyCode(String facultyCode) {
-        this.facultyCode = facultyCode;
-    }
+	public void setRace(String race) {
+		this.race = race;
+	}
 
-    public AddressPayload getPrimaryAddress() {
+	public FacultyCodePayload getFacultyCode() {
+		return facultyCode;
+	}
+
+	public void setFacultyCode(FacultyCodePayload facultyCode) {
+		this.facultyCode = facultyCode;
+	}
+
+	public AddressPayload getPrimaryAddress() {
         return primaryAddress;
     }
 
@@ -231,6 +225,14 @@ public class CandidatePayload {
 
 	public void setUserPayload(UserPayload userPayload) {
 		this.userPayload = userPayload;
+	}
+
+	public String getResearchTitle() {
+		return researchTitle;
+	}
+
+	public void setResearchTitle(String researchTitle) {
+		this.researchTitle = researchTitle;
 	}
 
 	@JsonCreator
