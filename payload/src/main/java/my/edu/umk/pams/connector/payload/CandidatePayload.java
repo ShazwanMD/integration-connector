@@ -20,13 +20,13 @@ public class CandidatePayload {
     private String mobile;
     private String fax;
     private String programLevel;
-    private String ResearchTitle;
 
     // todo: use the object version
     private String cohortCode;
-    private String programCode;
-    private String facultyCode;
-        
+    private ProgramCodePayload programCode;
+    private FacultyCodePayload facultyCode;
+
+    
     private BigDecimal balance;
     private boolean outstanding;
     
@@ -40,6 +40,8 @@ public class CandidatePayload {
     private AddressPayload secondaryAddress;
     
     private String supervisorCode;
+    
+    private String researchTitle;
        
 	public String getGender() {
 		return gender;
@@ -129,23 +131,31 @@ public class CandidatePayload {
         this.cohortCode = cohortCode;
     }
 
-    public String getProgramCode() {
-        return programCode;
-    }
+	public ProgramCodePayload getProgramCode() {
+		return programCode;
+	}
 
-    public void setProgramCode(String programCode) {
-        this.programCode = programCode;
-    }
+	public void setProgramCode(ProgramCodePayload programCode) {
+		this.programCode = programCode;
+	}
 
-    public String getFacultyCode() {
-        return facultyCode;
-    }
+	public String getRace() {
+		return race;
+	}
 
-    public void setFacultyCode(String facultyCode) {
-        this.facultyCode = facultyCode;
-    }
+	public void setRace(String race) {
+		this.race = race;
+	}
 
-    public AddressPayload getPrimaryAddress() {
+	public FacultyCodePayload getFacultyCode() {
+		return facultyCode;
+	}
+
+	public void setFacultyCode(FacultyCodePayload facultyCode) {
+		this.facultyCode = facultyCode;
+	}
+
+	public AddressPayload getPrimaryAddress() {
         return primaryAddress;
     }
 
@@ -216,21 +226,13 @@ public class CandidatePayload {
 	public void setUserPayload(UserPayload userPayload) {
 		this.userPayload = userPayload;
 	}
-	
+
 	public String getResearchTitle() {
-		return ResearchTitle;
+		return researchTitle;
 	}
 
 	public void setResearchTitle(String researchTitle) {
-		ResearchTitle = researchTitle;
-	}
-
-	public String getRace() {
-		return race;
-	}
-
-	public void setRace(String race) {
-		this.race = race;
+		this.researchTitle = researchTitle;
 	}
 
 	@JsonCreator

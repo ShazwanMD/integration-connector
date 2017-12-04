@@ -43,8 +43,6 @@ public class CandidateSenderTest extends AbstractJUnit4SpringContextTests {
         candidatePayload.setName("Ashfraf Wajidi");
         candidatePayload.setMatricNo("A177900");
         candidatePayload.setCohortCode("ABC");
-        candidatePayload.setFacultyCode("ABC");
-        candidatePayload.setProgramCode("ABC");
         candidatePayload.setEmail("ashraf@umk.edu.my");
         candidatePayload.setMobile("012920011");
         candidatePayload.setFax("1212");

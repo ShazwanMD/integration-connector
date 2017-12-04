@@ -62,7 +62,7 @@ public class ConnectorRoute extends RouteBuilder {
        // String today = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
         
         //Staf bukan akademik ptj dan fakulti ACTIVE
-/*        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        from("quartz://syncTimer?cron={{staffActiveSyncCron}}").log("sending Staf bukan akademik)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE (SM_DEPT_CODE IN ('A06','A09','A11','A01','A02','A04',"
         		+ "'A05','A07','A08','A10','B010205','A12','A13','B03','B08') "
@@ -94,12 +94,12 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicActive").end();
               
         
         
         //Staf bukan akademik ptj dan fakulti INACTIVE
-/*        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik inactive)")
+        from("quartz://syncTimer?cron={{staffInActiveSyncCron}}").log("sending Staf bukan akademik inactive)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE (SM_DEPT_CODE IN ('A06','A09','A11','A01','A02','A04',"
         		+ "'A05','A07','A08','A10','B010205','A12','A13','B03','B08') "
@@ -124,11 +124,11 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicInActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicInActive").end();
         
         
         //Staff Akademik Active
-/*        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf akademik active")
+        from("quartz://syncTimer?cron={{staffAcdmcActiveSyncCron}}").log("sending Staf akademik)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE "
         		+ "SOG_GROUP_CODE IN ('PENK','JUSA','PROF','PEN','PM') "
@@ -151,10 +151,10 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicActive").end();
         
         //Staff Akademik InActive
-/*        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending Staf bukan akademik)")
+        from("quartz://syncTimer?cron={{staffAcdmcInActiveSyncCron}}").log("sending bukan akademik inactive)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE "
         		+ "SOG_GROUP_CODE IN ('PENK','JUSA','PROF','PEN','PM') "
@@ -177,12 +177,12 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeInActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeInActive").end();
         
         
         
         //Department
-/*        from("quartz://syncTimer?cron={{sampleCronExpression}}").log("sending department code)")
+        from("quartz://syncTimer?cron={{staffDepartSyncCron}}").log("sending Staf Department)")
         .to("sql:SELECT DM_DEPT_CODE,DM_DEPT_DESC,DM_ID_PREFIX "
         		+ "FROM CMSADMIN.V_PAMS_DEPT?useIterator=true")
         .log("sending from direct channel")
@@ -210,7 +210,7 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes").end();*/
+        .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes").end();
         
  
 //===============================================================================================================================
@@ -222,7 +222,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.routeId("candidateQueue5")
 		.log("incoming candidate Queue 5")
 		.multicast()
-		.to("direct:academicCandidate","direct:accountCandidate"/*,"direct:radiusUser","direct:radiusRadCheck"*/)
+		.to("direct:academicCandidate","direct:accountCandidate","direct:radiusUser","direct:radiusRadCheck","direct:smartCard","direct:smartCardEncode")
 		.end();
 
 		from("direct:academicCandidate")
@@ -241,7 +241,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.log("Finish Send Account Candidate Queue 5")
 		.end();		
 		
-		/*from("direct:radiusUser")
+		from("direct:radiusUser")
 		.log("Start Send Radius User topic 5")
 		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
@@ -255,7 +255,23 @@ public class ConnectorRoute extends RouteBuilder {
 		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
 		.to("http4://{{rest.smart-api.host}}:{{rest.smart-api.port}}/api/smart/student/radiusManager/radCheck")
 		.log("Finish Send Radius radCheck topic 5")
-		.end();	*/
+		.end();
+		
+		from("direct:smartCard")
+		.log("Start Send Radius User topic 5")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.smart-api.host}}:{{rest.smart-api.port}}/api/smart/student/smartCardPelajar")
+		.log("Finish Send direct:smartCard topic 5")
+		.end();
+		
+		from("direct:smartCardEncode")
+		.log("Start Send Radius User topic 5")
+		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+		.to("http4://{{rest.smart-api.host}}:{{rest.smart-api.port}}/api/smart/student/smartCardEncodePelajar")
+		.log("Finish Send direct:smartCardEncode topic 5")
+		.end();	
 		
 //===============================================================================================================================
 //		Admission Payload Queue
