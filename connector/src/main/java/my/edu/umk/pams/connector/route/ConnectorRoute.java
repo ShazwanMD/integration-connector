@@ -59,6 +59,39 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================
 //		Ims Staf Integration
 //===============================================================================================================================
+        //Department
+        from("quartz://syncTimer?cron={{staffDepartSyncCron}}").log("sending Staf Department)")
+        .to("sql:SELECT DM_DEPT_CODE,DM_DEPT_DESC,DM_ID_PREFIX "
+        		+ "FROM CMSADMIN.V_PAMS_DEPT?useIterator=true")
+        .log("sending from direct channel")
+        .bean("departmentMapper", "process")
+        .multicast()
+        .to("direct:akademikFacultyCode"/*,"direct:intakeFacultyCode"*//*,"direct:accountFacultyCode"*/)
+        .end();
+        
+        from("direct:akademikFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
+        .log("incoming from direct channel direct:akademikFacultyCode")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/facultyCodes").end();
+        
+        from("direct:intakeFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
+        .log("incoming from direct channel direct:intakeFacultyCode")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
+        
+        from("direct:accountFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
+        .log("incoming from direct channel direct:accountFacultyCode")
+        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+        .log("${body}")
+        .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes").end();
+
+        
+        
        // String today = new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date());
         
         //Staf bukan akademik ptj dan fakulti ACTIVE
@@ -73,7 +106,7 @@ public class ConnectorRoute extends RouteBuilder {
         .log("sending from direct channel")
         .bean("staffMapper", "process")
         .multicast()
-        .to("direct:akademikImsBknAkdmkStaff","direct:intakeImsBknAkdmkStaff","direct:akaunImsBknAkdmkStaff")
+        .to("direct:akademikImsBknAkdmkStaff"/*,"direct:intakeImsBknAkdmkStaff"*//*,"direct:akaunImsBknAkdmkStaff"*/)
         .end();
         
         from("direct:akademikImsBknAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
@@ -100,7 +133,7 @@ public class ConnectorRoute extends RouteBuilder {
         
         
         //Staf bukan akademik ptj dan fakulti INACTIVE
-/*        from("quartz://syncTimer?cron={{staffInActiveSyncCron}}").log("sending Staf bukan akademik inactive)")
+        from("quartz://syncTimer?cron={{staffInActiveSyncCron}}").log("sending Staf bukan akademik inactive)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE (SM_DEPT_CODE IN ('A06','A09','A11','A01','A02','A04',"
         		+ "'A05','A07','A08','A10','B010205','A12','A13','B03','B08') "
@@ -110,7 +143,7 @@ public class ConnectorRoute extends RouteBuilder {
         .log("sending from direct channel")
         .bean("staffMapper", "process")
         .multicast()
-        .to("direct:akademikImsInActiveBknAkdmkStaff","direct:intakeImsInActiveBknAkdmkStaff")
+        .to("direct:akademikImsInActiveBknAkdmkStaff"/*,"direct:intakeImsInActiveBknAkdmkStaff"*/)
         .end();
         
         from("direct:akademikImsInActiveBknAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
@@ -125,11 +158,11 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicInActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/nonAcademicInActive").end();
         
         
         //Staff Akademik Active
-/*        from("quartz://syncTimer?cron={{staffAcdmcActiveSyncCron}}").log("sending Staf akademik)")
+        from("quartz://syncTimer?cron={{staffAcdmcActiveSyncCron}}").log("sending Staf akademik)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_ACTIVE WHERE "
         		+ "SOG_GROUP_CODE IN ('PENK','JUSA','PROF','PEN','PM') "
@@ -138,7 +171,7 @@ public class ConnectorRoute extends RouteBuilder {
         .log("sending from direct channel")
         .bean("staffMapper", "process")
         .multicast()
-        .to("direct:akademikImsAkdmkStaff","direct:intakeImsAkdmkStaff")
+        .to("direct:akademikImsAkdmkStaff"/*,"direct:intakeImsAkdmkStaff"*/)
         .end();
         
         from("direct:akademikImsAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
@@ -153,10 +186,10 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/academicActive").end();
         
         //Staff Akademik InActive
-/*        from("quartz://syncTimer?cron={{staffAcdmcInActiveSyncCron}}").log("sending bukan akademik inactive)")
+        from("quartz://syncTimer?cron={{staffAcdmcInActiveSyncCron}}").log("sending bukan akademik inactive)")
         .to("sql:SELECT SM_STAFF_ID,NAMA,SM_EMAIL_ADDR,SM_DEPT_CODE,SM_TELNO_WORK,SS_SALARY_GRADE,SOG_GROUP_CODE "
         		+ "FROM CMSADMIN.V_PAMS_STAFF_INACTIVE WHERE "
         		+ "SOG_GROUP_CODE IN ('PENK','JUSA','PROF','PEN','PM') "
@@ -164,7 +197,7 @@ public class ConnectorRoute extends RouteBuilder {
         .log("sending from direct channel")
         .bean("staffMapper", "process")
         .multicast()
-        .to("direct:akademikImsInActiveAkdmkStaff","direct:intakeImsInActiveAkdmkStaff")
+        .to("direct:akademikImsInActiveAkdmkStaff"/*,"direct:intakeImsInActiveAkdmkStaff"*/)
         .end();
         
         from("direct:akademikImsInActiveAkdmkStaff").marshal().json(JsonLibrary.Jackson, StaffPayload.class)
@@ -179,40 +212,10 @@ public class ConnectorRoute extends RouteBuilder {
         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
         .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
         .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeInActive").end();*/
+        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/staff/intakeInActive").end();
         
         
         
-        //Department
-/*        from("quartz://syncTimer?cron={{staffDepartSyncCron}}").log("sending Staf Department)")
-        .to("sql:SELECT DM_DEPT_CODE,DM_DEPT_DESC,DM_ID_PREFIX "
-        		+ "FROM CMSADMIN.V_PAMS_DEPT?useIterator=true")
-        .log("sending from direct channel")
-        .bean("departmentMapper", "process")
-        .multicast()
-        .to("direct:akademikFacultyCode","direct:intakeFacultyCode","direct:accountFacultyCode")
-        .end();
-        
-        from("direct:akademikFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
-        .log("incoming from direct channel direct:akademikFacultyCode")
-        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-        .log("${body}")
-        .to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/facultyCodes").end();
-        
-        from("direct:intakeFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
-        .log("incoming from direct channel direct:intakeFacultyCode")
-        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-        .log("${body}")
-        .to("http4://{{rest.intake.host}}:{{rest.intake.port}}/api/integration/facultyCodes").end();
-        
-        from("direct:accountFacultyCode").marshal().json(JsonLibrary.Jackson, FacultyCodePayload.class)
-        .log("incoming from direct channel direct:accountFacultyCode")
-        .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-        .setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-        .log("${body}")
-        .to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/facultyCodes").end();*/
         
  
 //===============================================================================================================================
@@ -224,7 +227,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.routeId("candidateQueue5")
 		.log("incoming candidate Queue 5")
 		.multicast()
-		.to("direct:academicCandidate","direct:accountCandidate","direct:radiusUser","direct:radiusRadCheck","direct:smartCard","direct:smartCardEncode")
+		.to("direct:academicCandidate"/*,"direct:accountCandidate"*/,"direct:radiusUser","direct:radiusRadCheck","direct:smartCard","direct:smartCardEncode")
 		.end();
 
 		from("direct:academicCandidate")
@@ -279,29 +282,29 @@ public class ConnectorRoute extends RouteBuilder {
 //		Admission Payload Queue
 //===============================================================================================================================		
 		
-		//Admission Payload From Academic
-		from("jms:queue:AdmissionPayloadQueue5")
-		.routeId("AdmissionPayloadQueue5")
-		.log("Incoming AdmissionPayloadQueue Queue 5")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/admissions")
-		.log("Finish Incoming AdmissionPayloadQueue Queue 5")
-		.end();
+//		//Admission Payload From Academic
+//		from("jms:queue:AdmissionPayloadQueue5")
+//		.routeId("AdmissionPayloadQueue5")
+//		.log("Incoming AdmissionPayloadQueue Queue 5")
+//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/admissions")
+//		.log("Finish Incoming AdmissionPayloadQueue Queue 5")
+//		.end();
 
 		
 //===============================================================================================================================
 //		Account Payload Queue
 //===============================================================================================================================
 		//Sending Student Account From Account
-		from("jms:queue:accountQueue5")
-		.routeId("accountQueue5")
-		.log("Start incoming Student's Account Queue 5")
-		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/studentAccounts")
-		.log("Finish Receive Student's Account Queue 5")
-		.end();
+//		from("jms:queue:accountQueue5")
+//		.routeId("accountQueue5")
+//		.log("Start incoming Student's Account Queue 5")
+//		.setHeader(Exchange.HTTP_METHOD, constant("PUT"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//		.to("http4://{{rest.academic.host}}:{{rest.academic.port}}/api/integration/studentAccounts")
+//		.log("Finish Receive Student's Account Queue 5")
+//		.end();
 
 //===============================================================================================================================
 //		Faculty Payload Topic
@@ -312,7 +315,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.routeId("facultyCodeQueue5")
 		.log("Incoming Faculty Code Queue 5")
 		.multicast()
-		.to("direct:intakeFaculty","direct:accountFaculty")
+		.to("direct:intakeFaculty"/*,"direct:accountFaculty"*/)
 		.end();
 
 		from("direct:intakeFaculty")
@@ -341,7 +344,7 @@ public class ConnectorRoute extends RouteBuilder {
 		.routeId("programCodeQueue5")
 		.log("incoming program code Queue 5")
 		.multicast()
-		.to("direct:intakeProgram","direct:accountProgram")
+		.to("direct:intakeProgram"/*,"direct:accountProgram"*/)
 		.end();
 
 		from("direct:intakeProgram")
@@ -366,14 +369,14 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================
 		
 		//Guardian Payload From Academic
-		from("jms:queue:GuardianPayloadQueue5")
-		.routeId("GuardianPayloadQueue5")
-		.log("Start incoming Guardian Payload Queue 5")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/guardians")
-		.log("Finish Receive Guardian Payload Queue 5")
-		.end();
+//		from("jms:queue:GuardianPayloadQueue5")
+//		.routeId("GuardianPayloadQueue5")
+//		.log("Start incoming Guardian Payload Queue 5")
+//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/guardians")
+//		.log("Finish Receive Guardian Payload Queue 5")
+//		.end();
 
 
 //===============================================================================================================================
@@ -381,14 +384,14 @@ public class ConnectorRoute extends RouteBuilder {
 //===============================================================================================================================
 		
 		
-		from("jms:queue:MinAmountPayloadQueue5")
-		.routeId("MinAmountPayloadQueue5")
-		.log("Start incoming Min Amount Payload Queue 5")
-		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
-		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
-		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/minAmounts")
-		.log("Finish incoming Min Amount Payload Queue 5")
-		.end();
+//		from("jms:queue:MinAmountPayloadQueue5")
+//		.routeId("MinAmountPayloadQueue5")
+//		.log("Start incoming Min Amount Payload Queue 5")
+//		.setHeader(Exchange.HTTP_METHOD, constant("POST"))
+//		.setHeader(Exchange.CONTENT_TYPE, constant("application/json"))
+//		.to("http4://{{rest.account.host}}:{{rest.account.port}}/api/integration/minAmounts")
+//		.log("Finish incoming Min Amount Payload Queue 5")
+//		.end();
 		
 		
 
